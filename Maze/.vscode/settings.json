@@ -1,0 +1,8 @@
+{
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "*.yacc": "yacc",
+        "iostream": "cpp",
+        "iosfwd": "cpp"
+    }
+}
