@@ -42,7 +42,7 @@ cell MAZE[xsize][ysize];
 int main(){
 	srand((unsigned int)time(NULL)); //seed random number generator with system time
 	initialize();      //initialize the maze
-	generate();        //generate the maze
+	generate();      //generate the maze
 #ifdef movie
 	for(int i=1;i<10;i++){
 		numin++;
@@ -144,7 +144,20 @@ void generate(){
 		MAZE[xcur][ycur].in=1;
 		numin++; //Every iteration of this loop, one maze cell is added to the maze.
 	}while(numin<(xsize-2)*(ysize-2));
-
+	for(int i = xsize/2 -3; i < xsize/2 + 5)
+	{
+		for(int j = ysize/2 - 3; j< ysize/2 + 5)
+		{
+			if(i != xsize/2 -3 && j != ysize/2 + 4)
+			{
+				MAZE[i][j].up = 0;
+			}
+			if(j != ysize/2 -3 && i != xsize/2 + 4)
+			{
+				MAZE[i][j].left = 0;
+			}
+		}
+	}
 	removeDeadEnd(xcur, ycur);
 
 #ifdef movie
