@@ -271,16 +271,18 @@ void savebmp(int xspecial, int yspecial){
 				else 
 				{
 					WHITE;
-					mazefile << '#';
+					mazefile << '.';
 				}
 			}
 		}
-		mazefile << endl;
+		
 		if (extrabytes){     // See above - BMP lines must be of lengths divisible by 4.
 			for (n = 1; n <= extrabytes; n++){
 				fprintf(outfile, "%c", 0);
+				// mazefile << '#';
 			}
 		}
+		mazefile << endl;
 	}
 	printf("file printed: %s\n", filename); 
 	fclose(outfile);
