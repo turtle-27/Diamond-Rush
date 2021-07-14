@@ -22,8 +22,8 @@ using namespace std;
 //#define movie   //this option spams bitmaps to illustrate each step of generation.
 
 long numin=1;     //Number of cells in the maze.
-const int xsize=25;
-const int ysize=25;
+const int xsize=20;
+const int ysize=20;
 
 void initialize();
 void generate();
@@ -162,10 +162,10 @@ void generate(){
 			if (x >= xsize/2 - 4 && x <= xsize/2 + 4 && y >= ysize/2 - 4 && y <= ysize/2 + 4)
 			{MAZE[x][y].interior_wall = 1; MAZE[x][y].in = 1;}
 
-			if (x >= xsize/2 - 3 && x <= xsize/2 + 3 && y >= ysize/2 - 3 && y <= ysize/2 + 4)
+			if (x >= xsize/2 - 4 && x <= xsize/2 + 4 && y >= ysize/2 - 4 && y <= ysize/2 + 4)
 			{MAZE[x][y].up = 1;}
 
-			if (x >= xsize/2 - 3 && x <= xsize/2 + 4 && y >= ysize/2 - 3 && y <= ysize/2 + 3)
+			if (x >= xsize/2 - 4 && x <= xsize/2 + 4 && y >= ysize/2 - 4 && y <= ysize/2 + 4)
 			{MAZE[x][y].left = 1;}	
 
 			if ((x >= xsize/2 - 3 && x <= xsize/2 + 3) && y >= ysize/2 - 3 && y <= ysize/2 + 3)
@@ -241,27 +241,23 @@ void generate(){
 		numin++; //Every iteration of this loop, one maze cell is added to the maze.
 	}while(numin<49);
 
-	// removeDeadEnd(xcur, ycur);
+	// for (int i = 1; i < xsize - 1; i++)
+	// {
+	// 	for (int j = 1; j < ysize - 1; j++)
+	// 	{
+	// 		if (i >= xsize/2 - 5 && i <= xsize/2 + 5 && j <= ysize/2 + 5 && j >= ysize/2 - 5)
+	// 		{
+	// 			continue;
+	// 		}
+	// 		else
+	// 		{
+	// 			removeDeadEnd(i,j);
+	// 		}
+	// 	}
+	// }
+	
 
-	ofstream mazefile("mazefile1.txt");
-	for(int i = 0; i < xsize; i++)
-	{
-		for (int j = 0; j < ysize; j++)
-		{
-			if (MAZE[i][j].up)
-			{
-				mazefile << '.';
-			}
-			else
-			{
-				mazefile << '#';
-			}
-		}
-		mazefile << endl;		
-	}
-
-	mazefile.close();
-
+	removeDeadEnd(xcur, ycur);
 	return;
 }
 
@@ -269,14 +265,14 @@ void removeDeadEnd(int xcur, int ycur)
 {
 	int success;
 	int whichway;
-	if( MAZE[xcur][ycur-1].in&&MAZE[xcur][ycur+1].in&&MAZE[xcur-1][ycur].in&&MAZE[xcur+1][ycur].in ){
+	if( MAZE[xcur][ycur-1].in&&MAZE[xcur][ycur+1].in&&MAZE[xcur-1][ycur].in&&MAZE[xcur+1][ycur].in){
 				   //If at a dead end, randomly destroy a wall to make it not a dead end!
 		do{
 			success=0;
 			whichway=rand()%4;
 			switch(whichway){
 			case UP:
-				if(MAZE[xcur][ycur].up&&ycur!=1){
+				if(MAZE[xcur][ycur].up&&ycur!=1 ){
 					success=1;
 					MAZE[xcur][ycur].up=0;
 				}
@@ -294,7 +290,7 @@ void removeDeadEnd(int xcur, int ycur)
 				}
 				break;
 			case RIGHT:
-				if(MAZE[xcur+1][ycur].left&&xcur!=xsize-2){
+				if(MAZE[xcur+1][ycur].left&&xcur!=xsize-2 ){
 					success=1;
 					MAZE[xcur+1][ycur].left=0;
 				}
@@ -355,11 +351,12 @@ void savebmp(int xspecial, int yspecial){
 						if (MAZE[x/2+1][y/2+1].interior_wall)
 						{
 							RED;
+							mazefile << '#';
 						}
 						else
 						{
 							WHITE; 
-							mazefile << '#';
+							mazefile << '.';
 						} 	
 					}
 					else 
@@ -367,6 +364,7 @@ void savebmp(int xspecial, int yspecial){
 						if (MAZE[x/2+1][y/2+1].interior_wall)
 						{
 							RED;
+							mazefile << '#';
 						}
 						else
 						{
@@ -380,6 +378,7 @@ void savebmp(int xspecial, int yspecial){
 				if (MAZE[x/2+1][y/2+1].interior_wall)
 				{
 					RED;
+					mazefile << '#';
 				}
 				else
 				{
@@ -392,6 +391,7 @@ void savebmp(int xspecial, int yspecial){
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
 						RED;
+						mazefile << '#';
 					}
 					else
 					{
@@ -404,11 +404,12 @@ void savebmp(int xspecial, int yspecial){
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
 						RED;
+						mazefile << '#';
 					}
 					else
 					{
 						WHITE; 
-						mazefile << '#';
+						mazefile << '.';
 					}
 				}
 			}else if(x%2 == 1 && y%2 == 0){
@@ -417,6 +418,7 @@ void savebmp(int xspecial, int yspecial){
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
 						RED;
+						mazefile << '#';
 					}
 					else
 					{
@@ -429,11 +431,12 @@ void savebmp(int xspecial, int yspecial){
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
 						RED;
+						mazefile << '#';
 					}
 					else
 					{
 						WHITE; 
-						mazefile << '#';
+						mazefile << '.';
 					}
 				}
 			}
