@@ -1,7 +1,19 @@
 #include "game.hpp"
+#include "TextureManager.hpp"
+#include "GameObject.hpp"
+#include "map.hpp"
 
-SDL_Texture* playerTex;
-SDL_Rect srcRect, destRect;
+#include "ECS.hpp"
+#include "components.hpp"
+
+GameObject* player;
+GameObject* enemy;
+Map* map;
+
+SDL_Renderer* Game::renderer = nullptr;
+
+Manager manager;
+auto& newPlayer(manager.addEntity());
 
 Game::Game()
 {}
@@ -33,10 +45,11 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         isRunning = false;
     }
 
-    SDL_Surface* tempSurface = IMG_Load("player.png");
-    playerTex = SDL_CreateTextureFromSurface(renderer, tempSurface);
-    SDL_FreeSurface(tempSurface);
-
+    player = new GameObject("data/player.png", 0, 0);
+    enemy = new GameObject("data/enemy.png", 50, 50);
+    map = new Map();
+    newPlayer.addComponent<PositionComponent>();
+    newPlayer.getComponent<PositionComponent>().setPos(500, 500);
 }
 
 void Game::handleEvents()
@@ -56,18 +69,20 @@ void Game::handleEvents()
 
 void Game::update()
 {
-    cnt++;
-    destRect.h = 32;
-    destRect.w = 32;
-    destRect.x = cnt;
+    player->Update();
+    enemy->Update();
+    manager.update();
+    std::cout << newPlayer.getComponent<PositionComponent>().x() << ", ";
+    std::cout << newPlayer.getComponent<PositionComponent>().y() << std::endl;
 }
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, playerTex, NULL, &destRect);
+    map->DrawMap();
+    player->Render();
+    enemy->Render();
     SDL_RenderPresent(renderer);
-
 }
 
 void Game::clean()

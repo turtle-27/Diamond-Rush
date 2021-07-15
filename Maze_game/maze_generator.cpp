@@ -342,15 +342,39 @@ void savebmp(int xspecial, int yspecial){
 	//Actual writing of data begins here:
 	for(x = 0; x <= width - 1; x++){
 		for(y = 0; y <= height - 1; y++){
+			
+			if ((x == width/2 + 1 && (y == height/2 - 7 || y == height/2 + 9 || y == height/2 - 6 || y == height/2 + 8)) || (y == height/2 + 1 && (x == width/2 - 7 || x == width/2 + 9 || x == width/2 - 6 || x == width/2 + 8)))
+			{
+				WHITE;
+				mazefile << '.';
+				continue;
+				
+			}
+			
+			if ((x == width/2 - 8 || x == width/2 + 10) && ( height/2 - 8 <= y && y <= height/2 + 10))
+			{
+				WHITE;
+				mazefile << '.';
+				continue;
+			}
+
+			if ((y == height/2 - 8 || y == height/2 + 10) && ( width/2 - 8 <= x && x <= width/2 + 10))
+			{
+				WHITE;
+				mazefile << '.';
+				continue;
+			}
+			
+			
 			if(x%2 == 1 && y%2 == 1){
-				if(x/2+1 == xspecial && y/2+1 == yspecial) RED;
+				if(x/2+1 == xspecial && y/2+1 == yspecial) BLACK;
 				else{
 					if(MAZE[x/2+1][y/2+1].in) 
 					{
 					 	
 						if (MAZE[x/2+1][y/2+1].interior_wall)
 						{
-							RED;
+							BLACK;
 							mazefile << '#';
 						}
 						else
@@ -363,7 +387,7 @@ void savebmp(int xspecial, int yspecial){
 					{
 						if (MAZE[x/2+1][y/2+1].interior_wall)
 						{
-							RED;
+							BLACK;
 							mazefile << '#';
 						}
 						else
@@ -377,7 +401,7 @@ void savebmp(int xspecial, int yspecial){
 				
 				if (MAZE[x/2+1][y/2+1].interior_wall)
 				{
-					RED;
+					BLACK;
 					mazefile << '#';
 				}
 				else
@@ -390,7 +414,7 @@ void savebmp(int xspecial, int yspecial){
 				{
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
-						RED;
+						BLACK;
 						mazefile << '#';
 					}
 					else
@@ -403,7 +427,7 @@ void savebmp(int xspecial, int yspecial){
 				{
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
-						RED;
+						BLACK;
 						mazefile << '#';
 					}
 					else
@@ -417,7 +441,7 @@ void savebmp(int xspecial, int yspecial){
 				{
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
-						RED;
+						BLACK;
 						mazefile << '#';
 					}
 					else
@@ -430,7 +454,7 @@ void savebmp(int xspecial, int yspecial){
 				{
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
-						RED;
+						BLACK;
 						mazefile << '#';
 					}
 					else
