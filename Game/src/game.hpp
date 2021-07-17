@@ -16,10 +16,11 @@ class Game
         void update();
         void render();
         void clean();
+        bool running() { return isRunning; }
 
         static SDL_Renderer* renderer; 
+        static SDL_Event event; 
 
-        bool running() { return isRunning; }
 
     private:
         int cnt = 0;
