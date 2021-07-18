@@ -10,10 +10,19 @@ Map* map;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
+std::vector<ColliderComponent*> Game::colliders;
+
 Manager manager;
 auto& player(manager.addEntity());
 auto& wall(manager.addEntity());
 
+enum groupLabels : std::size_t
+{
+    groupMap,
+    groupPlayers,
+    groupEnemies,
+    groupColliders
+};
 
 Game::Game()
 {}
@@ -42,16 +51,19 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
     }
     
     map = new Map();
+
+    Map::LoadMap("data/mazefile.txt", 17, 17);
     
-    player.addComponent<TransformComponent>();
+    player.addComponent<TransformComponent>(2);
     player.addComponent<KeyboardController>();
-    player.addComponent<SpriteComponent>("data/player.png");
+    player.addComponent<SpriteComponent>("data/player_idle.png", 4, 100);
     player.addComponent<ColliderComponent>("player");
-    
+    player.addGroup(groupPlayers);
 
     wall.addComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
     wall.addComponent<SpriteComponent>("data/dirt.png");
     wall.addComponent<ColliderComponent>("wall");
+    wall.addGroup(groupMap);
 
 }
 
@@ -74,18 +86,34 @@ void Game::update()
     manager.refresh();
     manager.update();
 
-    if (Collision::AABB(player.getComponent<ColliderComponent>().collider,
-                        wall.getComponent<ColliderComponent>().collider))
+    for (auto cc : colliders)
     {
-        player.getComponent<TransformComponent>().velocity * -1;
+        Collision::AABB(player.getComponent<ColliderComponent>(), *cc);  
     }
 }
+
+auto& tiles(manager.getGroup(groupMap));
+auto& players(manager.getGroup(groupPlayers));
+auto& enemies(manager.getGroup(groupEnemies));
 
 void Game::render()
 {
     SDL_RenderClear(renderer);
-    map->DrawMap();
-    manager.draw();
+    for (auto& t : tiles)
+    {
+        t->draw();
+    }
+
+    for (auto& p : players)
+    {
+        p->draw();
+    }
+
+    for (auto& e : enemies)
+    {
+        e->draw();
+    }
+
     SDL_RenderPresent(renderer);
 }
 
@@ -94,4 +122,11 @@ void Game::clean()
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
+}
+
+void Game::AddTile(int id, int x, int y)
+{
+    auto& tile(manager.addEntity());
+    tile.addComponent<TileComponent>(x, y, 32, 32, id);
+    tile.addGroup(groupMap);
 }
