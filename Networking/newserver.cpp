@@ -45,7 +45,7 @@ int main(int argc,char** argv)
         //cout << "line 44" << endl;
         int num_ready = SDLNet_CheckSockets(socket_set, 1000);
         //cout << "num ready " << num_ready << " count" << count << endl;
-        count++;
+        //count++;
         if(num_ready > 0)
         {
             //cout << "num ready " << num_ready << endl ;
