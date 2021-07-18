@@ -13,7 +13,7 @@ int main(int argc, char** argv)
     SDLNet_Init();
 
     IPaddress ip;
-    SDLNet_ResolveHost(&ip, NULL , PORT);
+    SDLNet_ResolveHost(&ip, "127.0.0.1" , PORT);
     
     TCPsocket client = SDLNet_TCP_Open(&ip);
 
@@ -23,21 +23,26 @@ int main(int argc, char** argv)
 
     while(true)
     {
-        SDLNet_TCP_Recv(client, msg_recv, 100);
+        // SDLNet_TCP_Recv(client, msg_recv, 100);
         
-        cout << "Server: " << msg_recv << endl;
+        // cout << "Server: " << msg_recv << endl;
 
-        if(strcmp(msg_recv, "quit") == 0)
-        {
-            cout << "Session Terminated." << endl;
-            break;
-        }
+        // if(strcmp(msg_recv, "quit") == 0)
+        // {
+        //     cout << "Session Terminated." << endl;
+        //     break;
+        // }
 
         cout << "Client: ";
         getline(cin, msg_send);
         text = msg_send.c_str();
-
+        
         SDLNet_TCP_Send(client, text, strlen(text)+1);
+        if(strcmp(text, "quit") == 0)
+        {
+            cout << "Session Terminated." << endl;
+            break;
+        }
     }
     
     SDLNet_TCP_Close(client);
