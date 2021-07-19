@@ -88,9 +88,9 @@ int main(int argc,char** argv)
                     num_ready--;
                     continue;
                 }
-                cout << "\nClient" << ind + 1 <<": ";
-                printf(text);
-                if(strcmp(text , "quit") == 0)
+                cout << "\nClient" << ind + 1 <<": " << *text;
+                // printf(text);
+                if(*text == 'q')
                 {
                     cout << "Session Terminated." << endl;
                     CloseSocket(ind);
