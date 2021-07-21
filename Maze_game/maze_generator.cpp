@@ -3,7 +3,7 @@
 #include <time.h>
 #include <iostream>
 #include <fstream>
-
+#include <vector>
 
 using namespace std;
 
@@ -29,6 +29,7 @@ void initialize();
 void generate();
 void savebmp(int xspecial, int yspecial);
 void removeDeadEnd(int xcur, int ycur);
+void addFood();
 
 struct cell{
 	bool interior_wall;
@@ -52,6 +53,7 @@ int main(){
 #else movie
 	savebmp(0,0);
 #endif
+	addFood();
 	return 0;
 }
 
@@ -478,6 +480,88 @@ void savebmp(int xspecial, int yspecial){
 	fclose(outfile);
 	mazefile.close();
 	return;
+}
+void addFood()
+{
+	fstream newfile;
+    
+	vector<string> svec;
+	newfile.open("mazefile.txt",ios::in); //open a file to perform read operation using file object
+    if (newfile.is_open()){ //checking whether the file is open
+		string tp;
+		while(getline(newfile, tp))
+		{ //read data from file object and put it into string.
+			svec.push_back(tp);
+		}		
+		newfile.close(); //close the file object.
+   	}
+
+	// Special food
+	int count = 5;
+	while(count != 0)
+	{
+		int r1 = rand()%37;
+	    int r2 = rand()%37;
+		string str = svec[r1];
+		if(str[r2] == '.')
+		{
+			str[r2] = 'C';
+			svec[r1] = str;
+			count--;
+		}
+	}
+
+	// Gate 
+	count = 2;
+	while(count != 0)
+	{
+		int r1 = rand()%(5);
+		int r2 = rand()%37;
+		string str = svec[r1];
+		if(str[r2] == '.')
+		{
+			str[r2] = 'G';
+			svec[r1] = str;
+			count--;
+		}
+	}
+	//spawn location for player1 & player2
+	count = 1;
+	while(count != 0)
+	{
+		int r1 = rand()%(37-30) + 30;
+		int r2 = rand()%(37-30) + 30;
+		string str = svec[r1];
+		if(str[r2] == '.')
+		{
+			str[r2] = 'P';
+			svec[r1] = str;
+			count--;
+		}
+
+	}
+
+	//spawn location for enemy
+	count = 1;
+	while(count != 0)
+	{
+		int r1 = rand()%(28-12) + 12;
+		int r2 = rand()%(28-12) + 12;
+		string str = svec[r1];
+		if(str[r2] == '.')
+		{
+			str[r2] = 'E';
+			svec[r1] = str;
+			count--;
+		}
+	}
+
+	newfile.open("maze.txt",ios::out);
+	for(int i = 0; i< svec.size(); i++)
+	{
+		newfile << svec[i] << endl;
+	}
+
 }
 
 
