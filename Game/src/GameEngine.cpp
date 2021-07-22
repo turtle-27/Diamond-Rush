@@ -147,7 +147,7 @@ void Game::loadMedia()
     player.loadFromFile("data/player.png");
     player.setColor(150, 120, 0);
     player2.loadFromFile("data/player.png");
-    player2.setColor(0, 150, 150);
+    player2.setColor(50, 150, 120);
     // Player Animations
     for (int i = 0; i < 4; i++)
     {
@@ -165,7 +165,7 @@ void Game::loadMedia()
     }
 
     tileSheet.loadFromFile("data/wall.png");
-    setTiles() ;
+    setTiles();
 }
 
 void Game::handleEvents()
