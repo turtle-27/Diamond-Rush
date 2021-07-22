@@ -39,7 +39,7 @@ int main(int argc,char** argv)
     // const char* text;
     // char msg_recv[100];
 
-    cout << "server connected" << endl;
+    cout << "server_connected" << endl;
     int count = 0;
     while(true)
     {
