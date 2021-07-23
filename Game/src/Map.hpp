@@ -10,7 +10,7 @@ class Tile
 		Tile( int x, int y, int tileType, int TILE_WIDTH, int TILE_HEIGHT );
 
 		//Shows the tile
-		void render(TextureManager TileTex, SDL_Rect gTileClips[]);
+		void render();
 
 		//Get the tile type
 		int getType();

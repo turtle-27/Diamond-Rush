@@ -1,6 +1,7 @@
 #pragma once
 
-#include "GameEngine.hpp"
+#include <string>
+#include <SDL2/SDL.h>
 
 class TextureManager
 {
