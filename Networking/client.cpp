@@ -5,8 +5,6 @@
 #include <unistd.h>
 #include <termios.h>
 
-
-
 #define PORT 1234
 
 using namespace std;
@@ -44,7 +42,7 @@ int main(int argc, char** argv)
     TCPsocket client = SDLNet_TCP_Open(&ip);
 
     string msg_send;
-    const char* text;
+    char* text;
     char msg_recv[100];
 
     while(true)
@@ -59,7 +57,7 @@ int main(int argc, char** argv)
         //     break;
         // }
 
-        cout << "Client: ";
+        // cout << "Client: ";
         // getline(cin, msg_send);
         // text = msg_send.c_str();
         char c = getch();
