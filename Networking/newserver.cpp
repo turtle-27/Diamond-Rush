@@ -2,7 +2,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
 #include <cstring>
-#include <../Game/src/Global.hpp>
 
 
 #define PORT 1234
@@ -85,14 +84,14 @@ int main(int argc,char** argv)
                 char msg_recv[100];
 
                 text = RecvData(ind);
-                if(ind == 0)
-                {
-                    text_p1 = text;
-                }
-                else
-                {
-                    text_p2 = text;
-                }
+                // if(ind == 0)
+                // {
+                //     text_p1 = text;
+                // }
+                // else
+                // {
+                //     text_p2 = text;
+                // }
                 if(text == NULL)
                 {
                     num_ready--;
