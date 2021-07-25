@@ -235,131 +235,14 @@ void Game::loadMedia()
 
 }
 
-void Game::handleEvents(char* text, int ind)
-{
-    // input_struct1 inp_str_game;
-    // input_struct2 inp_str_game2;
-    // char* c1 = inp_str_game.text_p1;
-    // char* c2 = inp_str_game2.text_p2;
-    
-    if (ind == 0)
-    {
-<<<<<<< HEAD
-        if( Game::event.type == SDL_QUIT )
-	    {
-	    	Game::isRunning = false;
-	    }
-
-        const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
-
-        // if ( currentKeyStates[ SDL_SCANCODE_SPACE] )
-        // {
-        //     if( Mix_PlayingMusic() == 0 )
-		// 	    {
-		// 		// Play the music
-		// 		Mix_PlayMusic( gMusic, -1 );
-		// 	    }
-        //     //If music is being played
-		//     else
-		//     {
-		//     //If the music is paused
-		//     if( Mix_PausedMusic() == 1 )
-		//     {
-		//     	//Resume the music
-		//     	Mix_ResumeMusic();
-		//     }
-		//     //If the music is playing
-		//     else
-		//     {
-		//     	//Pause the music
-		//     	Mix_PauseMusic();
-		//     }
-		//     }
-        // }
-
-        if ( currentKeyStates[ SDL_SCANCODE_ESCAPE ] )
-        {
-            Game::isRunning = false;
-            Mix_HaltMusic();    
-        }
-		else if( currentKeyStates[ SDL_SCANCODE_UP ] )
-		{
-=======
-        std::cout << "ind " << ind << std::endl;
-        //std::cout << "180" << std::endl;
-        player2_move = false;
-        if (*text == 'w')
-        {
-            //std::cout << "183.Game" << std::endl;
->>>>>>> 6179e9f2376de6f36312bf9186ad6c73b2e12a66
-            player_dir = 3;
-            player_move = true;
-        }
-        else if (*text == 's')
-        {
-            player_dir = 0;
-            player_move = true;
-        }
-        else
-        {
-            player_move = false;
-        }
-    }
-    else
-    {
-        std::cout << "ind " << ind << std::endl;
-        player_move = false;
-        if (*text == 'i')
-        {
-            //std::cout << "183.Game" << std::endl;
-            player2_dir = 3;
-            player2_move = true;
-        }
-        else if (*text == 'k')
-        {
-            player2_dir = 0;
-            player2_move = true;
-        }
-        else
-        {
-            player2_move = false;
-        }
-    }
-    
-    // if (c2 != NULL)
-    // {
-    //     //std::cout << "202" << std::endl;
-    //     if (*c2 == 'i')
-    //     {
-    //         //std::cout << "205" << std::endl;
-    //         player2_dir = 3;
-    //         player2_move = true;
-    //     }
-    //     else if (*c2 == 'k')
-    //     {
-    //         player2_dir = 0;
-    //         player2_move = true;
-    //     }
-    //      else
-    //     {
-    //         player2_move = false;
-    //     }
-    // }
-    // else
-    // {
-    //     player2_move = false;
-    // }
-    
-    
-    
-}
-
-<<<<<<< HEAD
-int state = 0;
-=======
-// void Game::handleEvents()
+// void Game::handleEvents(char* text, int ind)
 // {
-//     while(SDL_PollEvent( &Game::event ) != 0)
+//     // input_struct1 inp_str_game;
+//     // input_struct2 inp_str_game2;
+//     // char* c1 = inp_str_game.text_p1;
+//     // char* c2 = inp_str_game2.text_p2;
+    
+//     if (ind == 0)
 //     {
 //         if( Game::event.type == SDL_QUIT )
 // 	    {
@@ -368,84 +251,190 @@ int state = 0;
 
 //         const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 
+//         // if ( currentKeyStates[ SDL_SCANCODE_SPACE] )
+//         // {
+//         //     if( Mix_PlayingMusic() == 0 )
+// 		// 	    {
+// 		// 		// Play the music
+// 		// 		Mix_PlayMusic( gMusic, -1 );
+// 		// 	    }
+//         //     //If music is being played
+// 		//     else
+// 		//     {
+// 		//     //If the music is paused
+// 		//     if( Mix_PausedMusic() == 1 )
+// 		//     {
+// 		//     	//Resume the music
+// 		//     	Mix_ResumeMusic();
+// 		//     }
+// 		//     //If the music is playing
+// 		//     else
+// 		//     {
+// 		//     	//Pause the music
+// 		//     	Mix_PauseMusic();
+// 		//     }
+// 		//     }
+//         // }
+
 //         if ( currentKeyStates[ SDL_SCANCODE_ESCAPE ] )
 //         {
-//             Game::isRunning = false;    
+//             Game::isRunning = false;
+//             Mix_HaltMusic();    
 //         }
 // 		else if( currentKeyStates[ SDL_SCANCODE_UP ] )
 // 		{
 //             player_dir = 3;
 //             player_move = true;
-//             player_VelY = -VELOCITY;
-//             player_VelX = 0;
-// 		}
-// 		else if( currentKeyStates[ SDL_SCANCODE_DOWN ] )
-// 		{   
+//         }
+//         else if (*text == 's')
+//         {
 //             player_dir = 0;
 //             player_move = true;
-//             player_VelY = VELOCITY;
-//             player_VelX = 0;
-// 		}
-// 		else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
-// 		{
-//             player_dir = 1;
-//             player_move = true;
-//             player_VelX = -VELOCITY;
-//             player_VelY = 0;
-// 		}
-// 		else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
-// 		{   
-//             player_dir = 2;
-//             player_move = true;
-//             player_VelX = VELOCITY;
-//             player_VelY = 0;
-// 		}
+//         }
 //         else
 //         {
-//             player_VelX = 0;
-//             player_VelY = 0;
 //             player_move = false;
-//             player_frame = 0;
 //         }
-
-// 		if( currentKeyStates[ SDL_SCANCODE_W ] )
-// 		{
+//     }
+//     else
+//     {
+//         std::cout << "ind " << ind << std::endl;
+//         player_move = false;
+//         if (*text == 'i')
+//         {
+//             //std::cout << "183.Game" << std::endl;
 //             player2_dir = 3;
 //             player2_move = true;
-//             player2_VelY = -VELOCITY;
-//             player2_VelX = 0;
-// 		}
-// 		else if( currentKeyStates[ SDL_SCANCODE_S ] )
-// 		{   
+//         }
+//         else if (*text == 'k')
+//         {
 //             player2_dir = 0;
 //             player2_move = true;
-//             player2_VelY = VELOCITY;
-//             player2_VelX = 0;
-// 		}
-// 		else if( currentKeyStates[ SDL_SCANCODE_A ] )
-// 		{
-//             player2_dir = 1;
-//             player2_move = true;
-//             player2_VelX = -VELOCITY;
-//             player2_VelY = 0;
-// 		}
-// 		else if( currentKeyStates[ SDL_SCANCODE_D ] )
-// 		{   
-//             player2_dir = 2;
-//             player2_move = true;
-//             player2_VelX = VELOCITY;
-//             player2_VelY = 0;
-// 		}
+//         }
 //         else
 //         {
-//             player2_VelX = 0;
-//             player2_VelY = 0;
 //             player2_move = false;
-//             player2_frame = 0;
-//         }        
+//         }
 //     }
+    
+//     // if (c2 != NULL)
+//     // {
+//     //     //std::cout << "202" << std::endl;
+//     //     if (*c2 == 'i')
+//     //     {
+//     //         //std::cout << "205" << std::endl;
+//     //         player2_dir = 3;
+//     //         player2_move = true;
+//     //     }
+//     //     else if (*c2 == 'k')
+//     //     {
+//     //         player2_dir = 0;
+//     //         player2_move = true;
+//     //     }
+//     //      else
+//     //     {
+//     //         player2_move = false;
+//     //     }
+//     // }
+//     // else
+//     // {
+//     //     player2_move = false;
+//     // }
+    
+    
+    
 // }
->>>>>>> 6179e9f2376de6f36312bf9186ad6c73b2e12a66
+
+void Game::handleEvents()
+{
+    while(SDL_PollEvent( &Game::event ) != 0)
+    {
+        if( Game::event.type == SDL_QUIT )
+	    {
+	    	Game::isRunning = false;
+	    }
+
+        const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+
+        if ( currentKeyStates[ SDL_SCANCODE_ESCAPE ] )
+        {
+            Game::isRunning = false;    
+        }
+		else if( currentKeyStates[ SDL_SCANCODE_UP ] )
+		{
+            player_dir = 3;
+            player_move = true;
+            player_VelY = -VELOCITY;
+            player_VelX = 0;
+		}
+		else if( currentKeyStates[ SDL_SCANCODE_DOWN ] )
+		{   
+            player_dir = 0;
+            player_move = true;
+            player_VelY = VELOCITY;
+            player_VelX = 0;
+		}
+		else if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
+		{
+            player_dir = 1;
+            player_move = true;
+            player_VelX = -VELOCITY;
+            player_VelY = 0;
+		}
+		else if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
+		{   
+            player_dir = 2;
+            player_move = true;
+            player_VelX = VELOCITY;
+            player_VelY = 0;
+		}
+        else
+        {
+            player_VelX = 0;
+            player_VelY = 0;
+            player_move = false;
+            player_frame = 0;
+        }
+
+		if( currentKeyStates[ SDL_SCANCODE_W ] )
+		{
+            player2_dir = 3;
+            player2_move = true;
+            player2_VelY = -VELOCITY;
+            player2_VelX = 0;
+		}
+		else if( currentKeyStates[ SDL_SCANCODE_S ] )
+		{   
+            player2_dir = 0;
+            player2_move = true;
+            player2_VelY = VELOCITY;
+            player2_VelX = 0;
+		}
+		else if( currentKeyStates[ SDL_SCANCODE_A ] )
+		{
+            player2_dir = 1;
+            player2_move = true;
+            player2_VelX = -VELOCITY;
+            player2_VelY = 0;
+		}
+		else if( currentKeyStates[ SDL_SCANCODE_D ] )
+		{   
+            player2_dir = 2;
+            player2_move = true;
+            player2_VelX = VELOCITY;
+            player2_VelY = 0;
+		}
+        else
+        {
+            player2_VelX = 0;
+            player2_VelY = 0;
+            player2_move = false;
+            player2_frame = 0;
+        }        
+    }
+}
+
+int state = 0;
 
 void Game::update()
 {

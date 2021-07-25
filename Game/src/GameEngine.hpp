@@ -16,7 +16,7 @@ class Game
 
         void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
         void loadMedia();
-        void handleEvents(char* text, int ind);
+        void handleEvents();
         void update();
         void render();
         void clean();
