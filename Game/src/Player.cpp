@@ -1,65 +1,106 @@
+#include <iostream>
+
 #include "Player.hpp"
+#include "Collision.hpp"
 
-Dot::Dot()
+
+Player::Player()
 {
-	//Set collision box dimension
-	mBox.w = DOT_WIDTH;
-	mBox.h = DOT_HEIGHT;
-
     //Initialize the velocity
-    mVelX = 0;
-    mVelY = 0;
-}
+    player_VelX = 0;
+    player_VelY = 0;
 
-void Dot::move( Tile *tiles[], int screenW, int screenH )
-{
-    //Move the dot left or right
-    mBox.x += mVelX;
+    // Initialize animation speed
+    animation_speed = 100;
 
-    //If the dot went too far to the left or right or touched a wall
-    if( ( mBox.x < 0 ) || ( mBox.x + DOT_WIDTH > screenW ) )
+    // Initialize no of frames for animation 
+    NO_OF_FRAMES = 4;
+
+    // Player Animations
+    for (int i = 0; i < 4; i++)
     {
-        //move back
-        mBox.x -= mVelX;
-    }
-
-    //Move the dot up or down
-    mBox.y += mVelY;
-
-    //If the dot went too far up or down or touched a wall
-    if( ( mBox.y < 0 ) || ( mBox.y + DOT_HEIGHT > screenH ) )
-    {
-        //move back
-        mBox.y -= mVelY;
-    }
-}
-
-void Dot::handleEvent( SDL_Event& e )
-{
-    //If a key was pressed
-	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
-    {
-        //Adjust the velocity
-        switch( e.key.keysym.sym )
+        std::vector<SDL_Rect> row;
+        for (int j = 0; j < 4; j++)
         {
-            case SDLK_UP: mVelY -= DOT_VEL; break;
-            case SDLK_DOWN: mVelY += DOT_VEL; break;
-            case SDLK_LEFT: mVelX -= DOT_VEL; break;
-            case SDLK_RIGHT: mVelX += DOT_VEL; break;
+            SDL_Rect src;
+            src.x = j * 64;
+            src.y = i * 64; 
+            src.w = 64;
+            src.h = 64;
+            row.push_back(src);
+        }
+        player_animations.push_back(row);
+    }
+}
+
+void Player::load(std::string path, int x, int y, std::vector<Mix_Chunk*> music)
+{
+    // Initial enemy position
+    player_X = x;
+    player_Y = y;
+    
+    // Colliders for the players
+    playerCollider.x = player_X + PLAYER_WIDTH/8;
+    playerCollider.y = player_Y + PLAYER_HEIGHT/8;
+    playerCollider.w = 3*PLAYER_WIDTH/4;
+    playerCollider.h = 3*PLAYER_HEIGHT/4;
+
+    playerMusic = music;
+
+    player_tex.loadFromFile(path);
+}
+
+void Player::move(std::vector<SDL_Rect> &tileSet, std::vector<SDL_Rect> &wallSet, std::vector<SDL_Rect> &coinSet,
+				  std::vector<SDL_Rect> &enemies)
+{   
+    if (player_move)
+    {
+        player_frame = (SDL_GetTicks() / animation_speed) % 4;
+    }
+
+    player_X += player_VelX;
+    playerCollider.x += player_VelX;
+    
+    if( ( touchesWall( playerCollider, tileSet) || 
+          touchesWall( playerCollider, wallSet)))
+    {
+        player_X -= player_VelX;
+        playerCollider.x -= player_VelX;
+    }
+
+    player_Y += player_VelY;
+    playerCollider.y += player_VelY;
+
+    if( touchesWall( playerCollider, tileSet  ) || 
+        touchesWall( playerCollider, wallSet ) )
+    {
+        player_Y -= player_VelY;
+        playerCollider.y -= player_VelY;
+    }
+
+    for( int i = 0; i < coinSet.size(); i++ )
+    {
+        //If the collision box touches the coin 
+        if( checkCollision( playerCollider, coinSet[ i ] ) )
+        {
+            coinSet.erase(coinSet.begin() + i);
+            Mix_PlayChannel(-1, playerMusic[0], 0);
+            break;
         }
     }
-    //If a key was released
-    else if( e.type == SDL_KEYUP && e.key.repeat == 0 )
-    {
-        //Adjust the velocity
-        switch( e.key.keysym.sym )
-        {
-            case SDLK_UP: mVelY += DOT_VEL; break;
-            case SDLK_DOWN: mVelY -= DOT_VEL; break;
-            case SDLK_LEFT: mVelX += DOT_VEL; break;
-            case SDLK_RIGHT: mVelX -= DOT_VEL; break;
-        }
-    }
 }
 
 
+void Player::render()
+{    
+    if (player_move)
+    {
+        player_frame = (SDL_GetTicks() / animation_speed) % 4;
+    }
+    
+    SDL_Rect* player_currentClip = &player_animations[player_dir][player_frame];
+    if (player_display)
+    {
+        player_tex.render( player_X, player_Y, player_currentClip, PLAYER_WIDTH, PLAYER_HEIGHT, 1);
+    }
+}

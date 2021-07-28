@@ -4,90 +4,7 @@
 #include <vector>
 #include <fstream>
 #include "Global_defs.hpp"
-#include "GameEngine.hpp"
-#include "TextureManager.hpp"
-#include "Map.hpp"
-#include "Player.hpp"
-#include "Collision.hpp"
-
-SDL_Renderer* Game::renderer = nullptr;
-SDL_Event Game::event;
-
-int animation_speed = 100;
- 
-int VELOCITY = 2;
-int VELOCITY_ENEMY = 2;
-
-int player_frame = 0;
-int player_dir = 0;
-bool player_move = false;
-int player_X = 64;
-int player_Y = 64;
-int player_VelX = 0;
-int player_VelY = 0;
-bool player_display = true;
-SDL_Rect playerCollider;
-
-int player2_frame = 0;
-int player2_dir = 0;
-bool player2_move = false;
-int player2_X = 192;
-int player2_Y = 64;
-int player2_VelX = 0;
-int player2_VelY = 0;
-SDL_Rect player2Collider;
-
-int enemy_frame = 0;
-int enemy_dir = 1;
-bool enemy_move = false;
-int enemy_X = 256;
-int enemy_Y = 64;
-int enemy_VelX = VELOCITY_ENEMY;
-int enemy_VelY = VELOCITY_ENEMY;
-SDL_Rect enemyCollider;
-
-int player_width = 64;
-int player_height = 64;
-
-int coin_frame = 0;
-
-int TOTAL_TILES = 0;
-int TOTAL_COINS = 0;
-int TOTAL_COINS_2 = 0;
-int TOTAL_GRASS = 0;
-
-
-std::vector<SDL_Rect> tileSet;
-std::vector<SDL_Rect> grassSet;
-std::vector<SDL_Rect> coinSet;
-std::vector<SDL_Rect> coin2Set;
-
-std::vector<std::vector<SDL_Rect> > player_animations;
-std::vector<std::vector<SDL_Rect> > coin_animations;
-std::vector<std::vector<SDL_Rect> > enemy_animations;
-
-TextureManager player;
-TextureManager player2;
-TextureManager enemy;
-
-TextureManager tileSheet;
-TextureManager coinSheet;
-TextureManager coin2Sheet;
-TextureManager grassSheet;
-
-//The music that will be played
-Mix_Music *gMusic = NULL;
-Mix_Music *gMusic2 = NULL;
-
-//The sound effects that will be used
-Mix_Chunk *gScratch = NULL;
-Mix_Chunk *gHigh = NULL;
-Mix_Chunk *coinSound = NULL;
-Mix_Chunk *gLow = NULL;
-
-bool Game::isRunning = false;
-
-void setTiles();
+#include "loadMedia.hpp"
 
 Game::Game()
 {}
@@ -112,7 +29,11 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         }
 
-
+        //Initialize SDL_ttf
+		if( TTF_Init() == -1 )
+		{
+			printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+		}
         
         if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
 		{
@@ -120,119 +41,14 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		}
 
         isRunning = true;
-    }
-}
-
-void Game::loadMedia()
-{
-    // Players loaded
-    player2.loadFromFile("data/player.png");
-    player2.setColor(0, 235, 235);
-    player.loadFromFile("data/player.png");
-    player.setColor(235, 235, 235);
-    // Player Animations
-    for (int i = 0; i < 4; i++)
-    {
-        std::vector<SDL_Rect> row;
-        for (int j = 0; j < 4; j++)
-        {
-            SDL_Rect src;
-            src.x = j * 64;
-            src.y = i * 64; 
-            src.w = 64;
-            src.h = 64;
-            row.push_back(src);
-        }
-        player_animations.push_back(row);
+        quit = true;
     }
 
-    // Colliders for the players
-    playerCollider.x = player_X + player_width/8;
-    playerCollider.y = player_Y + player_height/8;
-    playerCollider.w = 3*player_width/4;
-    playerCollider.h = 3*player_height/4;
-
-    player2Collider.x = player2_X + player_width/8;
-    player2Collider.y = player2_Y + player_height/8;
-    player2Collider.w = 3*player_width/4;
-    player2Collider.h = 3*player_height/4;
-
-    enemy.loadFromFile("data/enemy.png");
-    // player2.setColor(0, 235, 235);
-
-    // Enemy Animations
-    for (int i = 0; i < 4; i++)
-    {
-        std::vector<SDL_Rect> row;
-        for (int j = 0; j < 3; j++)
-        {
-            SDL_Rect src;
-            src.x = j * 48;
-            src.y = i * 64; 
-            src.w = 48;
-            src.h = 64;
-            row.push_back(src);
-        }
-        enemy_animations.push_back(row);
-    }
-
-    // Colliders for the enemy
-    enemyCollider.x = enemy_X + player_width/8;
-    enemyCollider.y = enemy_Y + player_height/8;
-    enemyCollider.w = 3*player_width/4;
-    enemyCollider.h = 3*player_height/4;
-
-    coinSheet.loadFromFile("data/coin_gold.png");
-    coin2Sheet.loadFromFile("data/coin_silver.png");
-    // Coin Animations
-    for (int i = 0; i < 1; i++)
-    {
-        std::vector<SDL_Rect> row;
-        for (int j = 0; j < 8; j++)
-        {
-            SDL_Rect src;
-            src.x = j * 32;
-            src.y = i * 32; 
-            src.w = 32;
-            src.h = 32;
-            row.push_back(src);
-        }
-        coin_animations.push_back(row);
-    }
-
-    // Map loaded
-    grassSheet.loadFromFile("data/grass.png");
-    tileSheet.loadFromFile("data/wall_wood.png");
-    setTiles();
-
-    // Music and SoundEffects loaded
-    gMusic = Mix_LoadMUS( "data/INGAME_MUSIC.ogg" );
-	if( gMusic == NULL )
-	{
-		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-
-    // Music and SoundEffects loaded
-    gMusic2 = Mix_LoadMUS( "data/INTENSE_MUSIC.ogg" );
-	if( gMusic2 == NULL )
-	{
-		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-
-    gHigh = Mix_LoadWAV( "data/death.ogg" );
-    if( gHigh == NULL )
-	{
-		printf( "Failed to load high sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-
-    coinSound = Mix_LoadWAV( "data/coin_sound.wav" );
-    if( coinSound == NULL )
-	{
-		printf( "Failed to load high sound effect! SDL_mixer Error: %s\n", Mix_GetError() );
-	}
-
-    Mix_PlayMusic( gMusic, -1 );
-
+    srand((unsigned int)time(NULL)); //seed random number generator with system time
+	initialize();      //initialize the maze
+	generate();      //generate the maze
+	mazefile = savebmp();
+    mazefile = addCoins(mazefile, initial_coins1, initial_coins2);
 }
 
 // void Game::handleEvents(char* text, int ind)
@@ -340,9 +156,7 @@ void Game::loadMedia()
 //     // {
 //     //     player2_move = false;
 //     // }
-    
-    
-    
+
 // }
 
 void Game::handleEvents()
@@ -360,7 +174,26 @@ void Game::handleEvents()
         {
             Game::isRunning = false;    
         }
-		else if( currentKeyStates[ SDL_SCANCODE_UP ] )
+        
+        if( currentKeyStates[ SDL_SCANCODE_SPACE ] && !player_power_invisble && player_power_invisble_count > 0)
+		{
+            player.setAlpha(150);
+            player_power_invisble = true; 
+            player_invisble_time = SDL_GetTicks();
+            player_power_invisble_count--;
+            hud_player_power_invisble_cnt.loadFromRenderedText( std::to_string(player_power_invisble_count), {0 ,0, 0}, gFont );       
+		}
+
+        if( currentKeyStates[ SDL_SCANCODE_LSHIFT] && !player2_power_invisble && player2_power_invisble_count > 0)
+		{
+            player2.setAlpha(150);
+            player2_power_invisble = true; 
+            player2_invisble_time = SDL_GetTicks();       
+            player2_power_invisble_count--;
+            hud_player2_power_invisble_cnt.loadFromRenderedText( std::to_string(player2_power_invisble_count), {0 ,0, 0}, gFont );
+		}
+
+		if( currentKeyStates[ SDL_SCANCODE_UP ] )
 		{
             player_dir = 3;
             player_move = true;
@@ -434,14 +267,32 @@ void Game::handleEvents()
     }
 }
 
+// change of music 
 int state = 0;
 
 void Game::update()
 {
-    enemy_frame = (SDL_GetTicks() / animation_speed) % 3;
-    
     coin_frame = (SDL_GetTicks() / animation_speed) % 4;
-    
+
+    diamond_frame = (SDL_GetTicks() / animation_speed) % 7;
+
+    enemy1.move(tileSet, wallSet);
+    enemy2.move(tileSet, wallSet);
+    enemy3.move(tileSet, wallSet);
+    enemy4.move(tileSet, wallSet);
+
+    if ((SDL_GetTicks() - player_invisble_time >= 3000) && player_power_invisble)
+    {
+        player_power_invisble = false;
+        player.setAlpha(255);
+    }
+
+    if ((SDL_GetTicks() - player2_invisble_time >= 3000) && player2_power_invisble)
+    {
+        player2_power_invisble = false;
+        player2.setAlpha(255);
+    }
+
     if (player_move)
     {
         player_frame = (SDL_GetTicks() / animation_speed) % 4;
@@ -452,12 +303,11 @@ void Game::update()
         player2_frame = (SDL_GetTicks() / animation_speed) % 4;
     }
 
-
     player_X += player_VelX;
     playerCollider.x += player_VelX;
     
 
-    if( ( player_X < 0 ) || ( player_X + player_width > SCREEN_WIDTH ) || touchesWall( playerCollider, tileSet, TOTAL_TILES))
+    if( touchesWall( playerCollider, tileSet) || touchesWall( playerCollider, wallSet) )
     {
         player_X -= player_VelX;
         playerCollider.x -= player_VelX;
@@ -466,7 +316,7 @@ void Game::update()
     player_Y += player_VelY;
     playerCollider.y += player_VelY;
 
-    if( ( player_Y < 0 ) || ( player_Y + player_height > SCREEN_HEIGHT ) || touchesWall( playerCollider, tileSet, TOTAL_TILES ))
+    if( touchesWall( playerCollider, tileSet  ) || touchesWall( playerCollider, wallSet ) )
     {
         player_Y -= player_VelY;
         playerCollider.y -= player_VelY;
@@ -476,7 +326,7 @@ void Game::update()
     player2Collider.x += player2_VelX;
     
 
-    if( ( player2_X < 0 ) || ( player2_X + player_width > SCREEN_WIDTH ) || touchesWall( player2Collider, tileSet, TOTAL_TILES ))
+    if( touchesWall( player2Collider, tileSet ) || touchesWall( player2Collider, wallSet ) )
     {
         player2_X -= player2_VelX;
         player2Collider.x -= player2_VelX;
@@ -485,93 +335,37 @@ void Game::update()
     player2_Y += player2_VelY;
     player2Collider.y += player2_VelY;
 
-    if( ( player2_Y < 0 ) || ( player2_Y + player_height > SCREEN_HEIGHT ) || touchesWall( player2Collider, tileSet, TOTAL_TILES ))
+    if( touchesWall( player2Collider, tileSet) ||  touchesWall( player2Collider, wallSet) )
     {
         player2_Y -= player2_VelY;
         player2Collider.y -= player2_VelY;
     }
-
-    bool check_enemy_collide = false;
     
-    
-    enemy_X += enemy_VelX;
-    enemyCollider.x += enemy_VelX;
-
-    if( ( enemy_X < 0 ) || ( enemy_X + player_width > SCREEN_WIDTH ) || touchesWall( enemyCollider, tileSet, TOTAL_TILES))
+    for (int i = 0; i < 4; i++)
     {
-        enemy_X -= enemy_VelX;
-        enemyCollider.x -= enemy_VelX;
-        check_enemy_collide = true;
-    }
-
-    enemy_Y += enemy_VelY;
-    enemyCollider.y += enemy_VelY;
-
-    if( ( enemy_Y < 0 ) || ( enemy_Y + player_height > SCREEN_HEIGHT ) || touchesWall( enemyCollider, tileSet, TOTAL_TILES ))
-    {
-        enemy_Y -= enemy_VelY;
-        enemyCollider.y -= enemy_VelY;
-        check_enemy_collide = true;
-    }
-    
-    while(check_enemy_collide)
-    {
-        check_enemy_collide = false;
-
-        enemy_dir = rand() % 4;
-
-        if( enemy_dir == 0)
-	    {
-            enemy_VelY = -VELOCITY_ENEMY;
-            enemy_VelX = 0;
-	    }
-	    else if( enemy_dir == 2 )
-	    {   
-            enemy_VelY = VELOCITY_ENEMY;
-            enemy_VelX = 0;
-	    }
-	    else if( enemy_dir == 3 )
-	    {
-            enemy_VelX = -VELOCITY_ENEMY;
-            enemy_VelY = 0;
-	    }
-	    else if( enemy_dir == 1)
-	    {   
-            enemy_VelX = VELOCITY_ENEMY;
-            enemy_VelY = 0;
-	    }
-        
-        enemy_X += enemy_VelX;
-        enemyCollider.x += enemy_VelX;
-
-        if( ( enemy_X < 0 ) || ( enemy_X + player_width > SCREEN_WIDTH ) || touchesWall( enemyCollider, tileSet, TOTAL_TILES))
+        if (checkCollision(playerCollider, *enemies[i]) && !player_power_invisble 
+            && player_X != 50 && player_Y != 50)
         {
-            enemy_X -= enemy_VelX;
-            enemyCollider.x -= enemy_VelX;
-            check_enemy_collide = true;
+            player_X = 50;
+            player_Y = 50;
+            playerCollider.x = player_X + player_width/8;
+            playerCollider.y = player_Y + player_height/8;
+            player_lifes--;
+            hud_player_life.loadFromRenderedText( std::to_string(player_lifes), {0 ,0, 0}, gFont );
+            Mix_PlayChannel(-1, death, 0);
         }
 
-        enemy_Y += enemy_VelY;
-        enemyCollider.y += enemy_VelY;
-
-        if( ( enemy_Y < 0 ) || ( enemy_Y + player_height > SCREEN_HEIGHT ) || touchesWall( enemyCollider, tileSet, TOTAL_TILES ))
+        if (checkCollision(player2Collider, *enemies[i]) && !player2_power_invisble 
+            && player2_X != 50 && player2_Y != 850)
         {
-            enemy_Y -= enemy_VelY;
-            enemyCollider.y -= enemy_VelY;
-            check_enemy_collide = true;
+            player2_X = 50;
+            player2_Y = 850;
+            player2Collider.x = player2_X + player_width/8;
+            player2Collider.y = player2_Y + player_height/8;
+            player2_lifes--;
+            hud_player2_life.loadFromRenderedText( std::to_string(player2_lifes), {0 ,0, 0}, gFont );
+            Mix_PlayChannel(-1, death, 0);
         }
-    }
-
-    if (checkCollision(playerCollider, enemyCollider))
-    {
-        // player_display = false;
-        playerCollider.x = 64;
-        playerCollider.y = 64;
-        player_X = 64;
-        player_Y = 64;
-        // playerCollider.w = 0;
-        // playerCollider.h = 0;
-        Mix_PlayChannel(-1, gHigh, 0);
     }
 
     for( int i = 0; i < TOTAL_COINS; i++ )
@@ -601,13 +395,43 @@ void Game::update()
     if (TOTAL_COINS == 0 && TOTAL_COINS_2 == 0 && state == 0)
     {
         Mix_HaltMusic();
-        Mix_PlayMusic(gMusic2, -1);
-        VELOCITY_ENEMY++;
+        Mix_PlayMusic(intenseMusic, -1);
+        wallSet.erase(wallSet.begin() + gate_location);
+        TOTAL_WALL--;
+        enemy1.ENEMY_VELOCITY++;
+        enemy2.ENEMY_VELOCITY++;
+        enemy3.ENEMY_VELOCITY++;
+        enemy4.ENEMY_VELOCITY++;
         state = 1;
-    }   
+    }  
+
+    if (checkCollision(playerCollider, diamondCollider))
+    {
+        diamondCollider.x = -1;
+        diamondCollider.y = -1;
+        diamondCollider.w = 0;
+        diamondCollider.h = 0;
+        diamond_display = false;
+        Mix_HaltMusic();
+        Mix_PlayChannel(-1, game_win, 0);
+        SDL_Delay(3000);
+        quit = false;
+    }
+
+    if (checkCollision(player2Collider, diamondCollider))
+    {
+        diamondCollider.x = -1;
+        diamondCollider.y = -1;
+        diamondCollider.w = 0;
+        diamondCollider.h = 0;
+        diamond_display = false;
+        Mix_HaltMusic();
+        Mix_PlayChannel(-1, game_win, 0);
+        SDL_Delay(3000);
+        quit = true;
+    }
+     
 }
-
-
 
 void Game::render()
 {
@@ -616,18 +440,23 @@ void Game::render()
     
     SDL_Rect* player_currentClip = &player_animations[player_dir][player_frame];
     SDL_Rect* player2_currentClip = &player_animations[player2_dir][player2_frame];	
-    SDL_Rect* enemy_currentClip = &enemy_animations[enemy_dir][enemy_frame];	
 
     SDL_Rect* coin_currentClip = &coin_animations[0][coin_frame];
+    SDL_Rect* diamond_currentClip = &diamond_animations[0][diamond_frame];
+    
+    for ( int i = 0; i < TOTAL_GRASS; i++ )
+	{
+        grassSheet.render(grassSet[i].x, grassSet[i].y, NULL, TILE_WIDTH, TILE_HEIGHT, 1);
+	}
     
     for ( int i = 0; i < TOTAL_TILES; i++ )
 	{
         tileSheet.render(tileSet[i].x, tileSet[i].y, NULL, TILE_WIDTH, TILE_HEIGHT, 1);
 	}
 
-    for ( int i = 0; i < TOTAL_TILES; i++ )
+    for ( int i = 0; i < TOTAL_WALL; i++ )
 	{
-        grassSheet.render(grassSet[i].x, grassSet[i].y, NULL, TILE_WIDTH, TILE_HEIGHT, 1);
+        wallSheet.render(wallSet[i].x, wallSet[i].y, NULL, TILE_WIDTH, TILE_HEIGHT, 1);
 	}
 
     for ( int i = 0; i < TOTAL_COINS; i++ )
@@ -640,12 +469,52 @@ void Game::render()
         coin2Sheet.render(coin2Set[i].x, coin2Set[i].y, coin_currentClip, TILE_WIDTH, TILE_HEIGHT, 1);
 	}
 
+    if (diamond_display)
+    {
+        diamond.render( (MazeSizeX/2)*TILE_WIDTH, (MazeSizeY/2)*TILE_HEIGHT, diamond_currentClip, player_width, player_height, 1);
+    }
+
     if (player_display)
     {
         player.render( player_X, player_Y, player_currentClip, player_width, player_height, 1);
     }
-    player2.render( player2_X, player2_Y, player2_currentClip, player_width, player_height, 1);
-    enemy.render( enemy_X, enemy_Y, enemy_currentClip, player_width, player_height, 1);
+
+    if (player2_display)
+    {
+        player2.render( player2_X, player2_Y, player2_currentClip, player_width, player_height, 1);
+    }
+
+    enemy1.render();
+    enemy2.render();
+    enemy3.render();
+    enemy4.render();
+
+    SDL_Rect* hud_player_currentClip = &player_animations[0][0];
+
+    hud_lifes.render(980, 150, NULL, 200, 50, 1);
+    
+    hud_player.render(980, 200, hud_player_currentClip, 50, 50, 1);
+    hud_X.render(1040,200, NULL, 50, 50, 1);
+    hud_player_life.render(1100, 200, NULL, 40, 50, 1);
+    
+    hud_player2.render(980, 300, hud_player_currentClip, 50, 50, 1);
+    hud_X.render(1040,300, NULL, 50, 50, 1);
+    hud_player2_life.render(1100, 300, NULL, 40, 50, 1);
+    
+    hud_powerUP.render(980, 400, NULL, 200, 50, 1);
+
+    hud_player.setAlpha(150);
+    hud_player.render(980, 450, hud_player_currentClip, 50, 50, 1);
+    hud_player.setAlpha(255);
+    hud_X.render(1040,450, NULL, 50, 50, 1);
+    hud_player_power_invisble_cnt.render(1100, 450, NULL, 40, 50, 1);
+    
+    hud_player2.setAlpha(150);
+    hud_player2.render(980, 550, hud_player_currentClip, 50, 50, 1);
+    hud_player2.setAlpha(255);
+    hud_X.render(1040, 550, NULL, 50, 50, 1);
+    hud_player2_power_invisble_cnt.render(1100, 550, NULL, 40, 50, 1);
+
     SDL_RenderPresent(renderer);
 }
 
@@ -655,109 +524,152 @@ void Game::clean()
     player.free();
     player2.free();
     tileSheet.free();
+    grassSheet.free();
+    coinSheet.free();
+    coin2Sheet.free();
+    wallSheet.free();
+    diamond.free();
+    
+    enemy1.enemy_tex.free();
+    enemy2.enemy_tex.free();
+    enemy3.enemy_tex.free();
+    enemy4.enemy_tex.free();
 
     //Deallocate tiles
 	for( int i = 0; i < TOTAL_TILES; ++i )
 	{
         tileSet.pop_back();
 	}
-    
-    Mix_FreeMusic( gMusic );
-    Mix_FreeChunk( gScratch );
-	Mix_FreeChunk( gHigh );
+
+    //Deallocate grass
+	for( int i = 0; i < TOTAL_GRASS; ++i )
+	{
+        grassSet.pop_back();
+	}
+
+    //Deallocate Walls
+	for( int i = 0; i < TOTAL_WALL; ++i )
+	{
+        wallSet.pop_back();
+	}
+
+    //Deallocate Coins
+	for( int i = 0; i < TOTAL_COINS; ++i )
+	{
+        coinSet.pop_back();
+	}
+
+     //Deallocate Coins
+	for( int i = 0; i < TOTAL_COINS_2; ++i )
+	{
+        coin2Set.pop_back();
+	}
+
+    // Free Font
+    TTF_CloseFont( gFont );
+    gFont = NULL;
+
+    // Free Music
+    Mix_FreeMusic( introMusic );
+    Mix_FreeMusic( ingameMusic );
+    Mix_FreeMusic( intenseMusic );
 	Mix_FreeChunk( coinSound );
-	Mix_FreeChunk( gLow );
+	Mix_FreeChunk( game_win );
+    Mix_FreeChunk( death );
+    introMusic = NULL;
+    ingameMusic = NULL;
+    intenseMusic = NULL;
+    coinSound = NULL;
+    game_win = NULL;
+    death = NULL;
 
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+    window = NULL;
+	renderer = NULL;
+
     TTF_Quit();
     Mix_Quit();
     IMG_Quit();
     SDL_Quit();
 }
 
-void setTiles()
+void setTiles(std::string map)
 {
-	//Success flag
-	bool tilesLoaded = true;
-
-    //Open the map
-    std::ifstream map( "data/mazefile.txt" );
-
-    //If the map couldn't be loaded
-    if( map.fail() )
-    {
-		printf( "Unable to load map file!\n" );
-		tilesLoaded = false;
-    }
-	else
+    //Initialize the tiles
+	for( int x = 0; x < MazeSizeX; x++ )
 	{
-        //Initialize the tiles
-		for( int x = 0; x < MazeSizeX; x++ )
-		{
-			for ( int y = 0; y < MazeSizeY; y++ )
+		for ( int y = 0; y < MazeSizeY; y++ )
+        {
+            //Determines what kind of tile will be made
+		    int tileType = -1;
+
+            tileType = map[x*MazeSizeX + y] - '0';
+
+		    //If the number is a valid tile number                
+            if( tileType == 1 )
+		    {
+                SDL_Rect newTile;
+                newTile.x = x * TILE_WIDTH;
+                newTile.y = y * TILE_HEIGHT;
+                newTile.w = TILE_WIDTH;
+                newTile.h = TILE_HEIGHT;
+                tileSet.push_back(newTile);
+                TOTAL_TILES++;
+		    }
+            else if (tileType == 2 || tileType == 5)
             {
-                //Determines what kind of tile will be made
-			    int tileType = -1;
+                SDL_Rect newWall;
+                newWall.x = x * TILE_WIDTH;
+                newWall.y = y * TILE_HEIGHT;
+                newWall.w = TILE_WIDTH;
+                newWall.h = TILE_HEIGHT;
+                wallSet.push_back(newWall);
+                TOTAL_WALL++;
 
-			    //Read tile from map file
-			    map >> tileType;
-			    //If the was a problem in reading the map
-			    if( map.fail() )
-			    {
-			    	//Stop loading map
-			    	printf( "Error loading map: Unexpected end of file!\n" );
-			    	tilesLoaded = false;
-			    	break;
-                }
-
-			    //If the number is a valid tile number
-                
-                if( tileType == 1 )
-			    {
-                    SDL_Rect newTile;
-                    newTile.x = x * TILE_WIDTH;
-                    newTile.y = y * TILE_HEIGHT;
-                    newTile.w = TILE_WIDTH;
-                    newTile.h = TILE_HEIGHT;
-                    tileSet.push_back(newTile);
-                    TOTAL_TILES++;
-			    }
-                else if (tileType == 2)
+                if (tileType == 5)
                 {
-                    SDL_Rect newCoin;
-                    newCoin.x = x * TILE_WIDTH;
-                    newCoin.y = y * TILE_HEIGHT;
-                    newCoin.w = TILE_WIDTH;
-                    newCoin.h = TILE_HEIGHT;
-                    coinSet.push_back(newCoin);
-                    TOTAL_COINS++;
-                }
-                else if (tileType == 3)
-                {
-                    SDL_Rect newCoin;
-                    newCoin.x = x * TILE_WIDTH;
-                    newCoin.y = y * TILE_HEIGHT;
-                    newCoin.w = TILE_WIDTH;
-                    newCoin.h = TILE_HEIGHT;
-                    coin2Set.push_back(newCoin);
-                    TOTAL_COINS_2++;
-                }
-
-                if (tileType != 1)
-                {
-                    SDL_Rect newTile;
-                    newTile.x = x * TILE_WIDTH;
-                    newTile.y = y * TILE_HEIGHT;
-                    newTile.w = TILE_WIDTH;
-                    newTile.h = TILE_HEIGHT;
-                    grassSet.push_back(newTile);
-                    TOTAL_GRASS++;
+                    gate_location = TOTAL_WALL-1;
                 }
             }
-		}
-	}
+            else if (tileType == 3)
+            {
+                SDL_Rect newCoin;
+                newCoin.x = x * TILE_WIDTH;
+                newCoin.y = y * TILE_HEIGHT;
+                newCoin.w = TILE_WIDTH;
+                newCoin.h = TILE_HEIGHT;
+                coinSet.push_back(newCoin);
+                TOTAL_COINS++;
+            }
+            else if (tileType == 4)
+            {
+                SDL_Rect newCoin;
+                newCoin.x = x * TILE_WIDTH;
+                newCoin.y = y * TILE_HEIGHT;
+                newCoin.w = TILE_WIDTH;
+                newCoin.h = TILE_HEIGHT;
+                coin2Set.push_back(newCoin);
+                TOTAL_COINS_2++;
+            }
 
-    //Close the file
-    map.close();
+            if (tileType != 1)
+            {
+                SDL_Rect newTile;
+                newTile.x = x * TILE_WIDTH;
+                newTile.y = y * TILE_HEIGHT;
+                newTile.w = TILE_WIDTH;
+                newTile.h = TILE_HEIGHT;
+                grassSet.push_back(newTile);
+                TOTAL_GRASS++;
+            }
+
+            if (tileType == 6)
+            {
+                enemy_spawn.push_back(std::make_pair(x * TILE_WIDTH,y * TILE_HEIGHT));
+            }
+
+        }
+	
+    }
 }

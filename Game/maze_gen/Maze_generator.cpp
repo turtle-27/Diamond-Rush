@@ -11,10 +11,10 @@ using namespace std;
 #define DOWN 1   //+y
 #define LEFT 2   //-x
 #define RIGHT 3  //+x
-#define OUTFILE "MAZE"
-#define WHITE fprintf(outfile, "%c%c%c", 255,255,255)
-#define BLACK fprintf(outfile, "%c%c%c", 0,0,0)
-#define RED   fprintf(outfile, "%c%c%c", 0,0,255)
+// #define OUTFILE "MAZE"
+// #define WHITE fprintf(outfile, "%c%c%c", 255,255,255)
+// #define BLACK fprintf(outfile, "%c%c%c", 0,0,0)
+// #define RED   fprintf(outfile, "%c%c%c", 0,0,255)
 
 #define nodeadend//generate a maze without any dead ends! (consequently, many solutions to maze)
 //#define prim    //enable this to generate mazes using prim's algorithm.
@@ -22,8 +22,8 @@ using namespace std;
 //#define movie   //this option spams bitmaps to illustrate each step of generation.
 
 long numin=1;     //Number of cells in the maze.
-const int xsize=20;
-const int ysize=20;
+const int xsize=11;
+const int ysize=11;
 
 void initialize();
 void generate();
@@ -50,11 +50,11 @@ int main(){
 		numin++;
 		savebmp(0,0);      //output the bitmap
 	}
-#else movie
+#else 
 	savebmp(0,0);
 #endif
-	addFood();
-	return 0;
+// 	addFood();
+// 	return 0;
 }
 
 void initialize(){
@@ -150,98 +150,98 @@ void generate(){
 	
 	removeDeadEnd(xcur, ycur);
 	
-	for(int x = xsize/2 - 4; x <= xsize/2 + 4; x++)
-	{
-		for(int y = ysize/2 - 4 ; y <= ysize/2 + 4; y++)
-		{
+	// for(int x = xsize/2 - 4; x <= xsize/2 + 4; x++)
+	// {
+	// 	for(int y = ysize/2 - 4 ; y <= ysize/2 + 4; y++)
+	// 	{
 			
-			// MAZE[x][y].interior_wall = (x==xsize/2 - 4 ||x==xsize/2 + 4||y==ysize/2 - 4||y==ysize/2 + 4)?1:0;
-			// MAZE[x][y].in   = (x==xsize/2 - 4 ||x==xsize/2 + 4||y==ysize/2 - 4||y==ysize/2 + 4)?1:0;
-			// //All maze cells have all walls existing by default, except the perimeter cells.
-			// MAZE[x][y].up   = (x==xsize/2 - 4||x==xsize/2 + 4||y==ysize/2 + 4)?0:1;
-			// MAZE[x][y].left = (x==xsize/2 - 4||y==ysize/2 - 4||y==ysize/2 + 4)?0:1;
+	// 		// MAZE[x][y].interior_wall = (x==xsize/2 - 4 ||x==xsize/2 + 4||y==ysize/2 - 4||y==ysize/2 + 4)?1:0;
+	// 		// MAZE[x][y].in   = (x==xsize/2 - 4 ||x==xsize/2 + 4||y==ysize/2 - 4||y==ysize/2 + 4)?1:0;
+	// 		// //All maze cells have all walls existing by default, except the perimeter cells.
+	// 		// MAZE[x][y].up   = (x==xsize/2 - 4||x==xsize/2 + 4||y==ysize/2 + 4)?0:1;
+	// 		// MAZE[x][y].left = (x==xsize/2 - 4||y==ysize/2 - 4||y==ysize/2 + 4)?0:1;
 			
-			if (x >= xsize/2 - 4 && x <= xsize/2 + 4 && y >= ysize/2 - 4 && y <= ysize/2 + 4)
-			{MAZE[x][y].interior_wall = 1; MAZE[x][y].in = 1;}
+	// 		if (x >= xsize/2 - 4 && x <= xsize/2 + 4 && y >= ysize/2 - 4 && y <= ysize/2 + 4)
+	// 		{MAZE[x][y].interior_wall = 1; MAZE[x][y].in = 1;}
 
-			if (x >= xsize/2 - 4 && x <= xsize/2 + 4 && y >= ysize/2 - 4 && y <= ysize/2 + 4)
-			{MAZE[x][y].up = 1;}
+	// 		if (x >= xsize/2 - 4 && x <= xsize/2 + 4 && y >= ysize/2 - 4 && y <= ysize/2 + 4)
+	// 		{MAZE[x][y].up = 1;}
 
-			if (x >= xsize/2 - 4 && x <= xsize/2 + 4 && y >= ysize/2 - 4 && y <= ysize/2 + 4)
-			{MAZE[x][y].left = 1;}	
+	// 		if (x >= xsize/2 - 4 && x <= xsize/2 + 4 && y >= ysize/2 - 4 && y <= ysize/2 + 4)
+	// 		{MAZE[x][y].left = 1;}	
 
-			if ((x >= xsize/2 - 3 && x <= xsize/2 + 3) && y >= ysize/2 - 3 && y <= ysize/2 + 3)
-			{
-				MAZE[x][y].in = 0; MAZE[x][y].interior_wall = 0;
-			}
-		}
-	}
+	// 		if ((x >= xsize/2 - 3 && x <= xsize/2 + 3) && y >= ysize/2 - 3 && y <= ysize/2 + 3)
+	// 		{
+	// 			MAZE[x][y].in = 0; MAZE[x][y].interior_wall = 0;
+	// 		}
+	// 	}
+	// }
 
 
-	xcur=xsize/2 - 3; 
-	ycur=ysize/2 - 3;
-	MAZE[xcur][ycur].in = 1;
-	numin = 1;
-	do{
+// 	xcur=xsize/2 - 3; 
+// 	ycur=ysize/2 - 3;
+// 	MAZE[xcur][ycur].in = 1;
+// 	numin = 1;
+// 	do{
 
-#ifdef nodeadend
-	removeDeadEnd(xcur, ycur);
-#endif
-#ifdef backtrack
-		while( MAZE[xcur][ycur-1].in&&MAZE[xcur][ycur+1].in&&
-			   MAZE[xcur-1][ycur].in&&MAZE[xcur+1][ycur].in ){
-				   //If all the neighbourhood cells are in, backtrack.
-				int xcur2=MAZE[xcur][ycur].prevx;
-				ycur=MAZE[xcur][ycur].prevy;
-				xcur=xcur2;
-		}
-#endif
-		do{
-			//Randomly grow the maze if possible.
-			success=0;
-			whichway=rand()%4;
-			switch(whichway){
-			case UP:
-				if(!MAZE[xcur][ycur-1].in){
-					success=1;
-					MAZE[xcur][ycur].up=0;
-					MAZE[xcur][ycur-1].prevx=xcur;
-					MAZE[xcur][ycur-1].prevy=ycur;
-					ycur--;
-				}
-				break;
-			case DOWN:
-				if(!MAZE[xcur][ycur+1].in){
-					success=1;
-					MAZE[xcur][ycur+1].up=0;
-					MAZE[xcur][ycur+1].prevx=xcur;
-					MAZE[xcur][ycur+1].prevy=ycur;
-					ycur++;
-				}
-				break;
-			case LEFT:
-				if(!MAZE[xcur-1][ycur].in){
-					success=1;
-					MAZE[xcur][ycur].left=0;
-					MAZE[xcur-1][ycur].prevx=xcur;
-					MAZE[xcur-1][ycur].prevy=ycur;
-					xcur--;
-				}
-				break;
-			case RIGHT:
-				if(!MAZE[xcur+1][ycur].in){
-					success=1;
-					MAZE[xcur+1][ycur].left=0;
-					MAZE[xcur+1][ycur].prevx=xcur;
-					MAZE[xcur+1][ycur].prevy=ycur;
-					xcur++;
-				}
-				break;
-			}
-		}while(!success);
-		MAZE[xcur][ycur].in=1;
-		numin++; //Every iteration of this loop, one maze cell is added to the maze.
-	}while(numin<49);
+// #ifdef nodeadend
+// 	removeDeadEnd(xcur, ycur);
+// #endif
+// #ifdef backtrack
+// 		while( MAZE[xcur][ycur-1].in&&MAZE[xcur][ycur+1].in&&
+// 			   MAZE[xcur-1][ycur].in&&MAZE[xcur+1][ycur].in ){
+// 				   //If all the neighbourhood cells are in, backtrack.
+// 				int xcur2=MAZE[xcur][ycur].prevx;
+// 				ycur=MAZE[xcur][ycur].prevy;
+// 				xcur=xcur2;
+// 		}
+// #endif
+// 		do{
+// 			//Randomly grow the maze if possible.
+// 			success=0;
+// 			whichway=rand()%4;
+// 			switch(whichway){
+// 			case UP:
+// 				if(!MAZE[xcur][ycur-1].in){
+// 					success=1;
+// 					MAZE[xcur][ycur].up=0;
+// 					MAZE[xcur][ycur-1].prevx=xcur;
+// 					MAZE[xcur][ycur-1].prevy=ycur;
+// 					ycur--;
+// 				}
+// 				break;
+// 			case DOWN:
+// 				if(!MAZE[xcur][ycur+1].in){
+// 					success=1;
+// 					MAZE[xcur][ycur+1].up=0;
+// 					MAZE[xcur][ycur+1].prevx=xcur;
+// 					MAZE[xcur][ycur+1].prevy=ycur;
+// 					ycur++;
+// 				}
+// 				break;
+// 			case LEFT:
+// 				if(!MAZE[xcur-1][ycur].in){
+// 					success=1;
+// 					MAZE[xcur][ycur].left=0;
+// 					MAZE[xcur-1][ycur].prevx=xcur;
+// 					MAZE[xcur-1][ycur].prevy=ycur;
+// 					xcur--;
+// 				}
+// 				break;
+// 			case RIGHT:
+// 				if(!MAZE[xcur+1][ycur].in){
+// 					success=1;
+// 					MAZE[xcur+1][ycur].left=0;
+// 					MAZE[xcur+1][ycur].prevx=xcur;
+// 					MAZE[xcur+1][ycur].prevy=ycur;
+// 					xcur++;
+// 				}
+// 				break;
+// 			}
+// 		}while(!success);
+// 		MAZE[xcur][ycur].in=1;
+// 		numin++; //Every iteration of this loop, one maze cell is added to the maze.
+	// }while(numin<49);
 
 	// for (int i = 1; i < xsize - 1; i++)
 	// {
@@ -259,7 +259,7 @@ void generate(){
 	// }
 	
 
-	removeDeadEnd(xcur, ycur);
+	// removeDeadEnd(xcur, ycur);
 	return;
 }
 
@@ -345,31 +345,38 @@ void savebmp(int xspecial, int yspecial){
 	for(x = 0; x <= width - 1; x++){
 		for(y = 0; y <= height - 1; y++){
 			
-			if ((x == width/2 + 1 && (y == height/2 - 7 || y == height/2 + 9 || y == height/2 - 6 || y == height/2 + 8)) || (y == height/2 + 1 && (x == width/2 - 7 || x == width/2 + 9 || x == width/2 - 6 || x == width/2 + 8)))
+			// Center
+			if(x == width/2 && y == height/2)
 			{
-				// WHITE;
-				mazefile << '.';
-				continue;
-				
-			}
-			
-			if ((x == width/2 - 8 || x == width/2 + 10) && ( height/2 - 8 <= y && y <= height/2 + 10))
-			{
-				// WHITE;
-				mazefile << '.';
+				mazefile << '0';
+				mazefile << ' ';
 				continue;
 			}
 
-			if ((y == height/2 - 8 || y == height/2 + 10) && ( width/2 - 8 <= x && x <= width/2 + 10))
+			// Wall around center
+			if ((x == width/2 - 1 && y >= height/2 - 1 && y <= height/2 + 1) ||
+				(x == width/2 + 1 && y >= height/2 - 1 && y <= height/2 + 1) ||
+				(y == height/2 - 1 && x >= width/2 - 1 && x <= width/2 + 1) ||	
+				(y == height/2 + 1 && x >= width/2 - 1 && x <= width/2 + 1))
 			{
-				// WHITE;
-				mazefile << '.';
+				mazefile << '2';
+				mazefile << ' ';
 				continue;
 			}
-			
-			
+
+			if ((x == width/2 - 2 && y >= height/2 - 2 && y <= height/2 + 2) ||
+				(x == width/2 + 2 && y >= height/2 - 2 && y <= height/2 + 2) ||
+				(y == height/2 - 2 && x >= width/2 - 2 && x <= width/2 + 2) ||	
+				(y == height/2 + 2 && x >= width/2 - 2 && x <= width/2 + 2))
+			{
+				mazefile << '0';
+				mazefile << ' ';
+				continue;
+			}
+
+	
 			if(x%2 == 1 && y%2 == 1){
-				if(x/2+1 == xspecial && y/2+1 == yspecial) mazefile << '#';
+				if(x/2+1 == xspecial && y/2+1 == yspecial) mazefile << '1';
 				else{
 					if(MAZE[x/2+1][y/2+1].in) 
 					{
@@ -377,12 +384,12 @@ void savebmp(int xspecial, int yspecial){
 						if (MAZE[x/2+1][y/2+1].interior_wall)
 						{
 							// BLACK;
-							mazefile << '#';
+							mazefile << '1';
 						}
 						else
 						{
 							// WHITE; 
-							mazefile << '.';
+							mazefile << '0';
 						} 	
 					}
 					else 
@@ -390,12 +397,12 @@ void savebmp(int xspecial, int yspecial){
 						if (MAZE[x/2+1][y/2+1].interior_wall)
 						{
 							// BLACK;
-							mazefile << '#';
+							mazefile << '1';
 						}
 						else
 						{
 							// BLACK; 
-							mazefile << '#';
+							mazefile << '1';
 						}
 					}
 				}
@@ -404,12 +411,12 @@ void savebmp(int xspecial, int yspecial){
 				if (MAZE[x/2+1][y/2+1].interior_wall)
 				{
 					// BLACK;
-					mazefile << '#';
+					mazefile << '1';
 				}
 				else
 				{
 					// BLACK; 
-					mazefile << '#';
+					mazefile << '1';
 				}
 			}else if(x%2 == 0 && y%2 == 1){
 				if(MAZE[x/2+1][y/2+1].left) 
@@ -417,12 +424,12 @@ void savebmp(int xspecial, int yspecial){
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
 						// BLACK;
-						mazefile << '#';
+						mazefile << '1';
 					}
 					else
 					{
 						// BLACK; 
-						mazefile << '#';
+						mazefile << '1';
 					}
 				}
 				else 
@@ -430,12 +437,12 @@ void savebmp(int xspecial, int yspecial){
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
 						// BLACK;
-						mazefile << '#';
+						mazefile << '1';
 					}
 					else
 					{
 						// WHITE; 
-						mazefile << '.';
+						mazefile << '0';
 					}
 				}
 			}else if(x%2 == 1 && y%2 == 0){
@@ -444,12 +451,12 @@ void savebmp(int xspecial, int yspecial){
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
 						// BLACK;
-						mazefile << '#';
+						mazefile << '1';
 					}
 					else
 					{
 						// BLACK; 
-						mazefile << '#';
+						mazefile << '1';
 					}
 				}
 				else 
@@ -457,16 +464,16 @@ void savebmp(int xspecial, int yspecial){
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
 						// BLACK;
-						mazefile << '#';
+						mazefile << '1';
 					}
 					else
 					{
 						// WHITE; 
-						mazefile << '.';
+						mazefile << '0';
 					}
 				}
 			}
-
+			mazefile << ' ';
 			
 		}
 		mazefile << endl;
@@ -481,87 +488,87 @@ void savebmp(int xspecial, int yspecial){
 	mazefile.close();
 	return;
 }
-void addFood()
-{
-	fstream newfile;
+// void addFood()
+// {
+// 	fstream newfile;
     
-	vector<string> svec;
-	newfile.open("mazefile.txt",ios::in); //open a file to perform read operation using file object
-    if (newfile.is_open()){ //checking whether the file is open
-		string tp;
-		while(getline(newfile, tp))
-		{ //read data from file object and put it into string.
-			svec.push_back(tp);
-		}		
-		newfile.close(); //close the file object.
-   	}
+// 	vector<string> svec;
+// 	newfile.open("mazefile.txt",ios::in); //open a file to perform read operation using file object
+//     if (newfile.is_open()){ //checking whether the file is open
+// 		string tp;
+// 		while(getline(newfile, tp))
+// 		{ //read data from file object and put it into string.
+// 			svec.push_back(tp);
+// 		}		
+// 		newfile.close(); //close the file object.
+//    	}
 
-	// Special food
-	int count = 5;
-	while(count != 0)
-	{
-		int r1 = rand()%37;
-	    int r2 = rand()%37;
-		string str = svec[r1];
-		if(str[r2] == '.')
-		{
-			str[r2] = 'C';
-			svec[r1] = str;
-			count--;
-		}
-	}
+// 	// Special food
+// 	int count = 5;
+// 	while(count != 0)
+// 	{
+// 		int r1 = rand()%37;
+// 	    int r2 = rand()%37;
+// 		string str = svec[r1];
+// 		if(str[r2] == '.')
+// 		{
+// 			str[r2] = 'C';
+// 			svec[r1] = str;
+// 			count--;
+// 		}
+// 	}
 
-	// Gate 
-	count = 2;
-	while(count != 0)
-	{
-		int r1 = rand()%(5);
-		int r2 = rand()%37;
-		string str = svec[r1];
-		if(str[r2] == '.')
-		{
-			str[r2] = 'G';
-			svec[r1] = str;
-			count--;
-		}
-	}
-	//spawn location for player1 & player2
-	count = 1;
-	while(count != 0)
-	{
-		int r1 = rand()%(37-30) + 30;
-		int r2 = rand()%(37-30) + 30;
-		string str = svec[r1];
-		if(str[r2] == '.')
-		{
-			str[r2] = 'P';
-			svec[r1] = str;
-			count--;
-		}
+// 	// Gate 
+// 	count = 2;
+// 	while(count != 0)
+// 	{
+// 		int r1 = rand()%(5);
+// 		int r2 = rand()%37;
+// 		string str = svec[r1];
+// 		if(str[r2] == '.')
+// 		{
+// 			str[r2] = 'G';
+// 			svec[r1] = str;
+// 			count--;
+// 		}
+// 	}
+// 	//spawn location for player1 & player2
+// 	count = 1;
+// 	while(count != 0)
+// 	{
+// 		int r1 = rand()%(37-30) + 30;
+// 		int r2 = rand()%(37-30) + 30;
+// 		string str = svec[r1];
+// 		if(str[r2] == '.')
+// 		{
+// 			str[r2] = 'P';
+// 			svec[r1] = str;
+// 			count--;
+// 		}
 
-	}
+// 	}
 
-	//spawn location for enemy
-	count = 1;
-	while(count != 0)
-	{
-		int r1 = rand()%(28-12) + 12;
-		int r2 = rand()%(28-12) + 12;
-		string str = svec[r1];
-		if(str[r2] == '.')
-		{
-			str[r2] = 'E';
-			svec[r1] = str;
-			count--;
-		}
-	}
+// 	//spawn location for enemy
+// 	count = 1;
+// 	while(count != 0)
+// 	{
+// 		int r1 = rand()%(28-12) + 12;
+// 		int r2 = rand()%(28-12) + 12;
+// 		string str = svec[r1];
+// 		if(str[r2] == '.')
+// 		{
+// 			str[r2] = 'E';
+// 			svec[r1] = str;
+// 			count--;
+// 		}
+// 	}
 
-	newfile.open("mazefile.txt",ios::out);
-	for(int i = 0; i< svec.size(); i++)
-	{
-		newfile << svec[i] << endl;
-	}
+// 	newfile.open("mazefile.txt",ios::out);
+// 	for(int i = 0; i< svec.size(); i++)
+// 	{
+// 		newfile << svec[i] << endl;
+// 	}
 
-}
+// }
 
 

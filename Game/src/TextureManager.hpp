@@ -2,6 +2,7 @@
 
 #include <string>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 class TextureManager
 {
@@ -15,7 +16,7 @@ class TextureManager
 		//Loads image at specified path
 		bool loadFromFile( std::string path );
 
-		// bool loadFromRenderedText( std::string textureText, SDL_Color textColor );
+		bool loadFromRenderedText( std::string textureText, SDL_Color textColor, TTF_Font *gFont);
 
 		//Deallocates texture
 		void free();
