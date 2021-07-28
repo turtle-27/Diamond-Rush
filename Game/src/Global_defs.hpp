@@ -14,11 +14,14 @@
 #include "Maze_generator.hpp"
 #include "Enemy.hpp"
 
+<<<<<<< HEAD
 
 int game_state = 0;
 
 int game_mode = 2;
 
+=======
+>>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 //Screen Constants
 const int SCREEN_WIDTH = 1200;
 const int SCREEN_HEIGHT = 950;
@@ -73,10 +76,15 @@ int diamond_frame = 0;
 bool diamond_display = true;
 SDL_Rect diamondCollider;
 
+<<<<<<< HEAD
 const int INITIAL_COINS = 16;
 
 int initial_coins1 = INITIAL_COINS;
 int initial_coins2 = INITIAL_COINS;
+=======
+int initial_coins1 = 1;
+int initial_coins2 = 1;
+>>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 
 int TOTAL_TILES = 0;
 int TOTAL_WALL = 0;
@@ -118,6 +126,7 @@ TextureManager hud_player2;
 TextureManager hud_lifes;
 TextureManager hud_powerUP;
 
+<<<<<<< HEAD
 TextureManager menuImage;
 TextureManager menuTitle;
 TextureManager menuBG;
@@ -141,6 +150,8 @@ int winner = -1;
 
 int menuItem = 0;
 
+=======
+>>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 std::string mazefile;
 
 //The music that will be played
@@ -151,14 +162,20 @@ Mix_Music *introMusic = NULL;
 //The sound effects that will be used
 Mix_Chunk *coinSound = NULL;
 Mix_Chunk *game_win = NULL;
+<<<<<<< HEAD
 Mix_Chunk *game_lose = NULL;
+=======
+>>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 Mix_Chunk *death = NULL;
 
 //The Font used
 TTF_Font *gFont = NULL;
 
 bool Game::isRunning = false;
+<<<<<<< HEAD
 bool Game::quit = true;
+=======
+>>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 
 void setTiles(std::string mazefile);
 

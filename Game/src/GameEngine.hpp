@@ -26,7 +26,11 @@ class Game
         static SDL_Renderer* renderer; 
         static SDL_Event event; 
         static bool isRunning;
+<<<<<<< HEAD
         static bool quit;
+=======
+        bool quit;
+>>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
         
     private:
         int cnt = 0;
