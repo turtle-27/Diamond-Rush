@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include "Map.hpp"
 
+
 class Dot
 {
     public:
@@ -19,7 +20,7 @@ class Dot
 		void handleEvent( SDL_Event& e );
 
 		//Moves the dot and checks collision
-		void move( Tile* tiles[]);
+		void move( Tile* tiles[], int screenW, int screenH);
 
 		//Shows the dot on the screen
 		void render();

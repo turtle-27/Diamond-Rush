@@ -10,7 +10,3 @@ const int MazeSizeY = 37;
 //Tile constants
 const int TILE_WIDTH = 64;
 const int TILE_HEIGHT = 64;
-const int TOTAL_TILE_SPRITES = 1;
-int TOTAL_TILES = 0;
-
-const int VELOCITY = 2;

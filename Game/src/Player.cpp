@@ -1,6 +1,4 @@
 #include "Player.hpp"
-// #include "Global_defs.hpp"
-// #include "Collision.hpp"
 
 Dot::Dot()
 {
@@ -13,44 +11,28 @@ Dot::Dot()
     mVelY = 0;
 }
 
-// bool touchesWall( SDL_Rect box, Tile* tiles[] )
-// {
-//     //Go through the tiles
-//     for( int i = 0; i < TOTAL_TILES; ++i )
-//     {
-//         //If the collision box touches the wall tile
-//         if( checkCollision( box, tiles[ i ]->getBox() ) )
-//         {
-//             return true;
-//         }
-//     }
+void Dot::move( Tile *tiles[], int screenW, int screenH )
+{
+    //Move the dot left or right
+    mBox.x += mVelX;
 
-//     //If no wall tiles were touched
-//     return false;
-// }
+    //If the dot went too far to the left or right or touched a wall
+    if( ( mBox.x < 0 ) || ( mBox.x + DOT_WIDTH > screenW ) )
+    {
+        //move back
+        mBox.x -= mVelX;
+    }
 
-// void Dot::move( Tile *tiles[] )
-// {
-//     //Move the dot left or right
-//     mBox.x += mVelX;
+    //Move the dot up or down
+    mBox.y += mVelY;
 
-//     //If the dot went too far to the left or right or touched a wall
-//     if( ( mBox.x < 0 ) || ( mBox.x + DOT_WIDTH > SCREEN_WIDTH ) || touchesWall( mBox, tiles ) )
-//     {
-//         //move back
-//         mBox.x -= mVelX;
-//     }
-
-//     //Move the dot up or down
-//     mBox.y += mVelY;
-
-//     //If the dot went too far up or down or touched a wall
-//     if( ( mBox.y < 0 ) || ( mBox.y + DOT_HEIGHT > SCREEN_HEIGHT ) || touchesWall( mBox, tiles ) )
-//     {
-//         //move back
-//         mBox.y -= mVelY;
-//     }
-// }
+    //If the dot went too far up or down or touched a wall
+    if( ( mBox.y < 0 ) || ( mBox.y + DOT_HEIGHT > screenH ) )
+    {
+        //move back
+        mBox.y -= mVelY;
+    }
+}
 
 void Dot::handleEvent( SDL_Event& e )
 {
