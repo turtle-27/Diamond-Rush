@@ -19,14 +19,10 @@ class Enemy
         TextureManager enemy_tex;
 
         // Enemy's Velocity magnitude
-<<<<<<< HEAD
         int ENEMY_VELOCITY;
-=======
-        int ENEMY_VELOCITY = 2;
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 
-		// The velocity of the enemy
-		int enemy_VelX, enemy_VelY;
+	// The velocity of the enemy
+	int enemy_VelX, enemy_VelY;
 
         // Frame no. for animation
         int enemy_frame = 0;
@@ -51,15 +47,10 @@ class Enemy
 		Enemy();
 
         // Loads the texture
-<<<<<<< HEAD
         void load(std::string path, int x, int y, int vel);
-=======
-        void load(std::string path, int x, int y);
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 
-		//Moves the enemy and checks collision
-		void move(std::vector<SDL_Rect> tileSet, std::vector<SDL_Rect> wallSet);
-
-		//Shows the enemy on the screen
-		void render();
+	//Moves the enemy and checks collision
+	void move(std::vector<SDL_Rect> tileSet, std::vector<SDL_Rect> wallSet);
+	//Shows the enemy on the screen
+	void render();
 };

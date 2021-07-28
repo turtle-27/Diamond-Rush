@@ -16,11 +16,7 @@ class TextureManager
 		//Loads image at specified path
 		bool loadFromFile( std::string path );
 
-<<<<<<< HEAD
 		bool loadFromRenderedText( std::string textureText, SDL_Color textColor, TTF_Font *gFont );
-=======
-		bool loadFromRenderedText( std::string textureText, SDL_Color textColor, TTF_Font *gFont);
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 
 		//Deallocates texture
 		void free();

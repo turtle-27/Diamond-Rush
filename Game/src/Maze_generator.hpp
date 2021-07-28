@@ -69,10 +69,7 @@ void generate(){
 				xcur=xcur2;
 		}
 #endif
-<<<<<<< HEAD
 		
-=======
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 		do{
 			//Randomly grow the maze if possible.
 			success=0;
@@ -121,10 +118,7 @@ void generate(){
 	}while(numin<(xsize-2)*(ysize-2));
 	
 	removeDeadEnd(xcur, ycur);
-<<<<<<< HEAD
 	numin = 1;
-=======
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 	return;
 }
 
@@ -219,16 +213,9 @@ std::string savebmp(){
 			if(x%2 == 1 && y%2 == 1){
 				if(MAZE[x/2+1][y/2+1].in) 
 				{
-<<<<<<< HEAD
 					if (MAZE[x/2+1][y/2+1].interior_wall)
 					{
 						mazefile += '0';
-=======
-				 	
-					if (MAZE[x/2+1][y/2+1].interior_wall)
-					{
-						mazefile += '1';
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 					}
 					else
 					{
@@ -237,11 +224,7 @@ std::string savebmp(){
 				}
 				else 
 				{
-<<<<<<< HEAD
 					mazefile += '0';
-=======
-					mazefile += '1';
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 				}
 			}else if(x%2 == 0 && y%2 == 0 ){
 				
@@ -332,10 +315,6 @@ std::string addCoins(std::string mapfile, int no_of_coins1, int no_of_coins2)
 			enemy_count--;
 		}
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
     return mapfile;
 }
 

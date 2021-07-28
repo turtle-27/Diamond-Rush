@@ -5,13 +5,6 @@
 
 Enemy::Enemy()
 {
-<<<<<<< HEAD
-=======
-    // Initialize the x and y velocity
-    enemy_VelX = ENEMY_VELOCITY;
-    enemy_VelY = ENEMY_VELOCITY;
-
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
     // Initialize animation speed
     animation_speed = 100;
 
@@ -35,25 +28,18 @@ Enemy::Enemy()
     }
 }
 
-<<<<<<< HEAD
 void Enemy::load(std::string path, int x, int y, int vel)
-=======
-void Enemy::load(std::string path, int x, int y)
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 {
     // Initial enemy position
     enemy_X = x;
     enemy_Y = y;
     
-<<<<<<< HEAD
     ENEMY_VELOCITY = vel;
     
     // Initialize the x and y velocity
     enemy_VelX = ENEMY_VELOCITY;
     enemy_VelY = ENEMY_VELOCITY;
 
-=======
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
     // Colliders for the enemy
     enemyCollider.x = enemy_X + ENEMY_WIDTH/8;
     enemyCollider.y = enemy_Y + ENEMY_HEIGHT/8;
@@ -109,11 +95,7 @@ void Enemy::move(std::vector<SDL_Rect> tileSet, std::vector<SDL_Rect> wallSet)
     enemy_Y += enemy_VelY;
     enemyCollider.y += enemy_VelY;
 
-<<<<<<< HEAD
     if( touchesWall( enemyCollider, tileSet) || touchesWall( enemyCollider, wallSet) )
-=======
-    if(  touchesWall( enemyCollider, tileSet) || touchesWall( enemyCollider, wallSet) )
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
     {
         enemy_Y -= enemy_VelY;
         enemyCollider.y -= enemy_VelY;

@@ -8,7 +8,6 @@ void Game::loadMedia()
     grassSheet.loadFromFile("data/grass.png");
     tileSheet.loadFromFile("data/wall_wood.png");
     wallSheet.loadFromFile("data/wall.png");
-<<<<<<< HEAD
     
     srand((unsigned int)time(NULL)); //seed random number generator with system time
 	initialize();      //initialize the maze
@@ -17,12 +16,6 @@ void Game::loadMedia()
     mazefile = addCoins(mazefile, initial_coins1, initial_coins2);
     setTiles(mazefile);
     
-=======
-    setTiles(mazefile);
-    
-    
-    
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
     // Players loaded
     player2.loadFromFile("data/player.png");
     player2.setColor(0, 235, 235);
@@ -54,22 +47,11 @@ void Game::loadMedia()
     player2Collider.y = player2_Y + player_height/8;
     player2Collider.w = 3*player_width/4;
     player2Collider.h = 3*player_height/4;
-<<<<<<< HEAD
         
     enemy1.load("data/ghost_sprite3.png", enemy_spawn[0].first, enemy_spawn[0].second, VELOCITY);
     enemy2.load("data/ghost_sprite3.png", enemy_spawn[1].first, enemy_spawn[1].second, VELOCITY);
     enemy3.load("data/ghost_sprite3.png", enemy_spawn[2].first, enemy_spawn[2].second, VELOCITY);
     enemy4.load("data/ghost_sprite3.png", enemy_spawn[3].first, enemy_spawn[3].second, VELOCITY);
-=======
-
-    enemy1.load("data/ghost_sprite3.png", enemy_spawn[0].first, enemy_spawn[0].second);
-
-    enemy2.load("data/ghost_sprite3.png", enemy_spawn[1].first, enemy_spawn[1].second);
-
-    enemy3.load("data/ghost_sprite3.png", enemy_spawn[2].first, enemy_spawn[2].second);
-    
-    enemy4.load("data/ghost_sprite3.png", enemy_spawn[3].first, enemy_spawn[3].second);
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 
 
     enemies.push_back(&enemy1.enemyCollider);
@@ -125,11 +107,7 @@ void Game::loadMedia()
     //Load HUD Components
 	SDL_Color textColor = { 0, 0, 0 };
 
-<<<<<<< HEAD
     hud_lifes.loadFromRenderedText( "Remaining Lives", textColor, gFont);
-=======
-    hud_lifes.loadFromRenderedText( "Remaining Lives", textColor, gFont );
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 
     hud_powerUP.loadFromRenderedText( "Invisible Power", textColor, gFont );
 
@@ -149,7 +127,6 @@ void Game::loadMedia()
     hud_player2.loadFromFile("data/player.png");
     hud_player2.setColor(0, 235, 235);
 
-<<<<<<< HEAD
     menuTitle.loadFromRenderedText("DIAMOND RUSH", textColor, gFont);
     menuImage.loadFromFile("data/MenuDiamond.png");
     menuBG.loadFromFile("data/bg.jpeg");
@@ -165,30 +142,18 @@ void Game::loadMedia()
     lose.loadFromFile("data/GameOver.jpg");
     win.loadFromFile("data/WIN.jpeg");
 
-=======
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
     // Music and SoundEffects loaded
     ingameMusic = Mix_LoadMUS( "data/INGAME_MUSIC.ogg" );
 	
     intenseMusic = Mix_LoadMUS( "data/INTENSE_MUSIC.ogg" );
 
-<<<<<<< HEAD
     introMusic = Mix_LoadMUS( "data/INTRO_MUSIC.ogg" );
 
-=======
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
     death = Mix_LoadWAV( "data/death.wav" );
     
     game_win = Mix_LoadWAV( "data/VICTORY_MUSIC.ogg" );
 
-<<<<<<< HEAD
     game_lose = Mix_LoadWAV( "data/gameOver.wav" );
 
     coinSound = Mix_LoadWAV( "data/coin_sound.wav" );
-=======
-    coinSound = Mix_LoadWAV( "data/coin_sound.wav" );
-
-    Mix_PlayMusic( ingameMusic, -1 );
-
->>>>>>> 1cff642d90a013126609ab76826fd752a683e2b7
 }
