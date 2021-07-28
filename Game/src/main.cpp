@@ -14,6 +14,11 @@
 // void CloseSocket(int index);
 // char* RecvData(int index);
 
+const int FPS = 60;
+const int time_per_frame = 1000/FPS; 
+Uint32 frameStart;
+int frameTime;
+
 Game *game = nullptr;
 using namespace std;
 
@@ -77,16 +82,17 @@ using namespace std;
 //     client[index] = NULL;
 // }
 
-
 int main(int argc, const char* argv[])
 {
-    const int FPS = 60;
-    const int time_per_frame = 1000/FPS; 
-
-    Uint32 frameStart;
-    int frameTime;
-
+    
     SDL_Init(SDL_INIT_EVERYTHING);
+        
+    game = new Game();
+    
+    game->init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1200, 950, false);
+    game->loadMedia();
+
+    
     // SDLNet_Init();
     
     // IPaddress ip;
@@ -102,110 +108,147 @@ int main(int argc, const char* argv[])
     
 
 
-    // // // string msg_send;
-    // // // const char* text;
-    // // // char msg_recv[100];
+    // string msg_send;
+    // const char* text;
+    // char msg_recv[100];
 
     // std::cout << "server connected" << std::endl;
     // int count = 0;
-    // // // while(true)
-    // // // {
-    // // // }
-    
 
-    
-    game = new Game();
-    game->init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 1000, false);
-    game->loadMedia();
+            bool flag = true;
 
-    while(game->running())
-    {
-        frameStart = SDL_GetTicks();
-        
-        
-        game->update();
-        game->render();
-
-        frameTime = SDL_GetTicks() - frameStart;
-
-        if (time_per_frame > frameTime)
-        {
-            SDL_Delay(time_per_frame - frameTime);
-        }
-
-        // // NETWORKING
-
-        // // //client = SDLNet_TCP_Accept(server);
-        // // //cout << "line 44" << endl;
-        // int num_ready = SDLNet_CheckSockets(socket_set, 1000);
-        // // //cout << "num ready " << num_ready << " count" << count << endl;
-        // // //count++;
-        // if(num_ready > 0)
-        // {
-        // //     //cout << "num ready " << num_ready << endl ;
-        //     if(SDLNet_SocketReady(server)) 
-        //     {
-        //         int got_socket = AcceptSocket(next_ind);
-        //         if(!got_socket) 
-        //         {
-        //             num_ready--;
-        //             continue;
-        //         }
-        //         else
-        //         {
-        //             std::cout << "\nClient " << next_ind + 1<< " connected" << std::endl;
-        //         }
-        // //         // NOTE: get a new index
-        //         int chk_count;
-        //         for(chk_count=0; chk_count<MAX_SOCKETS; ++chk_count) {
-        //             if(client[(next_ind+chk_count)%MAX_SOCKETS] == NULL) break;
-        //         }
-            
-        //         next_ind = (next_ind+chk_count)%MAX_SOCKETS;
-        // //         //printf("DB: new connection (next_ind = %d)n", next_ind);
-            
-        //         num_ready--;
-        //     }
-        // }
-        // for(int ind=0; (ind<MAX_SOCKETS) && num_ready; ++ind) 
-        // {
-        //         if(client[ind] == NULL) continue;
-        //         if(!SDLNet_SocketReady(client[ind])) continue;
-
-        //         std::string msg_send;
-        //         char* text;
-        //         char msg_recv[100];
-        //         input_struct1 inp_str;
-        //         input_struct2 inp_str2;
+            while(game->running())
+            {
+                if (!flag)
+                {
+                    break;
+                }
                 
-        //         text = RecvData(ind);
-        //         if(ind == 0)
-        //         {
-        //             //cout << "183.main" << endl;
-        //             inp_str.text_p1 = text;
-        //         }
-        //         else
-        //         {
-        //             //cout << "189" << endl;
-        //             inp_str2.text_p2 = text;
-        //         }
-        //         if(text == NULL)
-        //         {
-        //             num_ready--;
-        //             continue;
-        //         }
-        //         std::cout << "\nClient" << ind + 1 <<": " << *text;
-        //         // printf(text);
-        //         if(*text == 'q')
-        //         {
-        //             std::cout << "Session Terminated." << std::endl;
-        //             CloseSocket(ind);
-        //             break;
-        //         }
+                frameStart = SDL_GetTicks();
+
+                game->update();
+
+                game->render();
+
+                frameTime = SDL_GetTicks() - frameStart;
+                if (time_per_frame > frameTime)
+                {
+                    SDL_Delay(time_per_frame - frameTime);
+                }
 
                 game->handleEvents();
-                
-        }
+                // NETWORKING
+
+            // //client = SDLNet_TCP_Accept(server);
+            // //cout << "line 44" << endl;
+            // int num_ready = SDLNet_CheckSockets(socket_set, 1000);
+            // // //cout << "num ready " << num_ready << " count" << count << endl;
+            // // //count++;
+            // if(num_ready > 0)
+            // {
+            // //     //cout << "num ready " << num_ready << endl ;
+            //     if(SDLNet_SocketReady(server)) 
+            //     {
+            //         int got_socket = AcceptSocket(next_ind);
+            //         if(!got_socket) 
+            //         {
+            //             num_ready--;
+            //             continue;
+            //         }
+            //         else
+            //         {
+            //             std::cout << "\nClient " << next_ind + 1<< " connected" << std::endl;
+            //         }
+            // //         // NOTE: get a new index
+            //         int chk_count;
+            //         for(chk_count=0; chk_count<MAX_SOCKETS; ++chk_count) {
+            //             if(client[(next_ind+chk_count)%MAX_SOCKETS] == NULL) break;
+            //         }
+
+            //         next_ind = (next_ind+chk_count)%MAX_SOCKETS;
+            // //         //printf("DB: new connection (next_ind = %d)n", next_ind);
+
+            //         num_ready--;
+            //     }
+            // }
+
+            // for(int ind=0; (ind<MAX_SOCKETS) && num_ready; ++ind) 
+            // {
+            //         if(client[ind] == NULL) continue;
+            //         if(!SDLNet_SocketReady(client[ind])) continue;
+    
+            //         string msg_send;
+            //         const char* text;
+            //         char msg_recv[100]; 
+    
+            //         text = RecvData(ind);
+            //         if(text == NULL)
+            //         {
+            //             num_ready--;
+            //             continue;
+            //         }
+            //         cout << "\nClient" << ind + 1 <<": " << *text;
+            //         if(*text == 'q')
+            //         {
+            //             cout << "Session Terminated." << endl;
+            //             flag = false;
+            //             CloseSocket(ind);
+            //             break;
+            //         }
+
+            //         game->handleEvents(text, ind);
+    
+            // }
+
+            // for(int ind=0; (ind<MAX_SOCKETS) && num_ready; ++ind) 
+            // {
+            //         if(client[ind] == NULL) continue;
+            //         if(!SDLNet_SocketReady(client[ind])) continue;
+
+            //         std::string msg_send;
+            //         char* text;
+            //         char msg_recv[100];
+            //         input_struct1 inp_str;
+            //         input_struct2 inp_str2;
+
+            //         text = RecvData(ind);
+            //         if(ind == 0)
+            //         {
+            //             //cout << "183.main" << endl;
+            //             inp_str.text_p1 = text;
+            //         }
+            //         else
+            //         {
+            //             //cout << "189" << endl;
+            //             inp_str2.text_p2 = text;
+            //         }
+            //         if(text == NULL)
+            //         {
+            //             num_ready--;
+            //             continue;
+            //         }
+            //         std::cout << "\nClient" << ind + 1 <<": " << *text;
+            //         // printf(text);
+            //         if(*text == 'q')
+            //         {
+            //             std::cout << "Session Terminated." << std::endl;
+            //             CloseSocket(ind);
+            //             break;
+            //         }
+
+
+                 
+
+            }
+ 
+
+            game->clean();
+
+            
+            
+        
+    
+    
         /*if(client)
         {
             cout << "Client Connected." << endl;
@@ -244,7 +287,7 @@ int main(int argc, const char* argv[])
         
     
 
-    game->clean();
+    
 
     // if(SDLNet_TCP_DelSocket(socket_set, server) == -1) 
     // {

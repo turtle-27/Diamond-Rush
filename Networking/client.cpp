@@ -32,7 +32,6 @@ char getch() {
 
 int main(int argc, char** argv)
 {
-    //cout << "input: " << getch() << endl;
     SDL_Init(SDL_INIT_EVERYTHING);
     SDLNet_Init();
 
@@ -47,24 +46,11 @@ int main(int argc, char** argv)
 
     while(true)
     {
-        // SDLNet_TCP_Recv(client, msg_recv, 100);
-        
-        // cout << "Server: " << msg_recv << endl;
-
-        // if(strcmp(msg_recv, "quit") == 0)
-        // {
-        //     cout << "Session Terminated." << endl;
-        //     break;
-        // }
-
-        // cout << "Client: ";
-        // getline(cin, msg_send);
-        // text = msg_send.c_str();
         char c = getch();
         text = &c;
         
         SDLNet_TCP_Send(client, text, strlen(text)+1);
-        if(strcmp(text, "quit") == 0)
+        if(*text == 'q')
         {
             cout << "Session Terminated." << endl;
             break;
