@@ -11,6 +11,12 @@ A two player maze game based on the theme of mario brothers and their quest to r
 - similar commands for other libraries
 - Instructions to install the following libraries can be found on Lazy foo's Website.
 
+# To run the game
+- run the makefiles in Game/Game_server and Game/Game_client
+- To connect between different devices, change IPaddress (line 33) in Game/Game_client/src/client.cpp
+- Required game instructions are given in Game/DiamondRush.pdf
+
+
 # Links and online resources used
 - Lazy foo's SDL tutorial (https://lazyfoo.net/tutorials/SDL/index.php) 
 - Youtube playlists:
